@@ -10,6 +10,7 @@ if this was a repository for an app then the description of the app (What it doe
 
 # APP usage #
 
+description of the app, inputs, outputs, etc
 
 
 # Folder structure #
