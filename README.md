@@ -29,3 +29,9 @@ For each added functionality, create and test function individually, add to modu
 Main - the current minimally functional version of the product. The current release
 Develop - branch of product in the development. Branches will be merged into here to ensure changes don't clash
 Issue branches - branches linked to an issue or requested change. Once happy will be merged into develop. 
+
+# Issue Process for user requirement #
+
+- new user requirement documented in issue
+- bulletpoint broken down steps to meet requirement
+- add issue to KanBan board 
