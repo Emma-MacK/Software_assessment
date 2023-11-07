@@ -6,9 +6,9 @@ import requests
 id = "R67"
 
 # panelapp aerver
-server = "panelapp.genomicsengland.co.uk/api/v1"
+server = "https://panelapp.genomicsengland.co.uk/api/v1"
 # insert R code 
-ext = "/panels/${id}"
+ext = "/panels/" + id
 
 # adds server and ext with id 
 r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
