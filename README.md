@@ -1,5 +1,5 @@
-# University_work #
-A repository to hold the work I do for university
+# Project Goal #
+ A tool to manage gene panels for NHS National genomic test directory tests in the laboratory
 
 
 # APP NAME #
