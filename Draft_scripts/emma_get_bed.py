@@ -9,29 +9,32 @@ import pandas
 # Merged into one bed for multiple gene beds?
 
 
-url = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3"
+url = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A"
 
 
 # TO DO
-HGNC = "id go here, from raymond's code"
+HGNC = "4562"
 
 # can personalise filtering later?
 transcript_filter = "/mane_select/refseq/GRCh37"
 
+# full working url
+# "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A4562/mane_select/refseq/GRCh37"
 # build full request
 
 full_url = url + HGNC + transcript_filter
-
-#try:
-#  r = requests.get("https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A4562/mane_select/refseq/GRCh37", headers={ "content-type" : "application/json"})
-#  decoded = r.json()
-#  print(repr(decoded))
-#except:
-#  print("An exception occurred")
+print(full_url)
+try:
+   r = requests.get(full_url, headers={ "content-type" : "application/json"})
+   decoded = r.json()
+   print(repr(decoded))
+   json_dict = decoded[0]
+except:
+    print("An exception occurred")
+    with open('Draft_scripts/test.json') as f:
+        json_dict = json.load(f)[0]
 
 # json is actually in a list?
-with open('Draft_scripts/test.json') as f:
-    json_dict = json.load(f)[0]
 
 # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
 
