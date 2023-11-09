@@ -2,15 +2,15 @@
 import argparse
 import pandas as pd
 import requests
+from parseJsonPanelAppScript import parseJsonPanelAppFunction
 
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-ID", "--testID", help="input the Test ID")
 argParser.add_argument("-PanS", "--PanelSource", help="input the Test ID", choices=['NGTD','PanelApp'])
-
 args = argParser.parse_args()
 testID = args.testID
 PanelSource = args.PanelSource 
-
+# this code creates an argument parser that takes in the testID and panel source
 
 if testID[:1] != "R":
     print("invalid R code")
@@ -37,9 +37,9 @@ elif PanelSource == "PanelApp":
     # adds server and ext with id 
     r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
 
-    #returns data
-    decoded = r.json()
-    print(repr(decoded))
+    #parsesData and returns a dataframe
+    genePanelDataframe = parseJsonPanelAppFunction(r,False)
+    # you can access hgnc_IDs through: genePanelDataframe['hgnc_IDs']
 
 else:
     print("Valid options are NGTD or PanelApp")
