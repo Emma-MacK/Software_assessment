@@ -1,1 +1,4 @@
 argparse
+pandas==2.1.0
+requests
+openpyxl
