@@ -8,6 +8,20 @@ import pandas
 # want the HGNC number
 # Merged into one bed for multiple gene beds?
 
+
+url = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3"
+
+
+# TO DO
+HGNC = "id go here, from raymond's code"
+
+# can personalise filtering later?
+transcript_filter = "/mane_select/refseq/GRCh37"
+
+# build full request
+
+full_url = url + HGNC + transcript_filter
+
 #try:
 #  r = requests.get("https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A4562/mane_select/refseq/GRCh37", headers={ "content-type" : "application/json"})
 #  decoded = r.json()
@@ -28,11 +42,9 @@ transcripts_dict= transcripts_list[0]
 # get the Refseq ID for database
 RefSeq = transcripts_dict["reference"]
 
-
 # bedfile header
 with open('output.bed', 'w') as f:
     f.write("Chromosome\tstart\tend\tname\n")
-
 
 # get chromosome for BED
 annotations_dict = transcripts_dict["annotations"]
