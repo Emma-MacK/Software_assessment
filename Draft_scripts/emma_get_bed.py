@@ -20,6 +20,7 @@ def call_transcript_make_bed(HGNC_list):
             json_dict = decoded[0]
         except:
             print("An exception occurred connecting to variant validator")
+            exit()
 
         # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
         print("JSON found")
