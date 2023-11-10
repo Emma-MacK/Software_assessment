@@ -39,6 +39,7 @@ elif PanelSource == "PanelApp":
 
     #parsesData and returns a dataframe
     genePanelDataframe = parseJsonPanelAppFunction(r,False)
+    hgnc_IDs_list = genePanelDataframe.get('hgnc_IDs').to_list()
     # you can access hgnc_IDs through: genePanelDataframe['hgnc_IDs']
 
 else:

@@ -6,7 +6,8 @@ import os
 
 def parseJsonPanelAppFunction(r, logfile):
     """
-    This function takes in the response object parses it and returns a dataframe object with the following columns:
+    This function will handle the parsing of the JSON returned from PanelApp into the necessary fields.
+    It takes in the response object parses it and returns a dataframe object with the following columns:
     0   uniqueID 
     1   hgnc_IDs     
     2   gene_Name    
@@ -37,8 +38,8 @@ def parseJsonPanelAppFunction(r, logfile):
         zipped = list(zip(hgncIDs, geneNames,geneSymbols, omimGenes)) # prepare lists to enter dataframe
         entries = pd.DataFrame(zipped, columns=['hgnc_IDs', 'gene_Name', 'gene_Symbol', 'OMIM_Gene']) # populate dataframe with lists
         entries.insert(0, 'uniqueID', uniqueNum) #insert uniqueID column
-        if logfile == True:
-            os.makedirs('logFiles', exist_ok=True)  
+        if logfile is True:
+            os.makedirs('logFiles', exist_ok=True)
             entries.to_csv('logFiles/entries.csv')
         return(entries)
 
