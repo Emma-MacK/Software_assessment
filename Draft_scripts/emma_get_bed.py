@@ -40,11 +40,19 @@ def call_transcript_make_bed(HGNC_list, flank):
         annotations_dict = transcripts_dict["annotations"]
         chromosome = str(annotations_dict["chromosome"])
 
-        # get the info for database
-        RefSeq = transcripts_dict["reference"]
-        ensembl_select = str(annotations_dict["ensembl_select"])
-        mane_plus_clinical = str(annotations_dict["mane_plus_clinical"])
-        mane_select = str(annotations_dict["mane_select"])
+        # get the info for database and write into json
+        database_dict = {
+            "refseq" : transcripts_dict["reference"],
+            "ensembl_select" : str(annotations_dict["ensembl_select"]),
+            "mane_plus_clinical" : str(annotations_dict["mane_plus_clinical"]),
+            "mane_select" : str(annotations_dict["mane_select"])
+        }
+        json_object = json.dumps(database_dict, indent=4)
+        json_name = HGNC + "_VV_output.json"
+        # Writing to sample.json
+        with open(json_name, "w") as outfile:
+            outfile.write(json_object)
+
 
         # get start and end position for BED for each transcript
         genomic_spans_dict = transcripts_dict["genomic_spans"]
@@ -61,5 +69,6 @@ def call_transcript_make_bed(HGNC_list, flank):
 
 # HGNC will be called from raymond's section
 HGNC = ["1100", "4562"]
+# HGNC will be an argparse value (default 0)
 flank = 25
 call_transcript_make_bed(HGNC, flank)
