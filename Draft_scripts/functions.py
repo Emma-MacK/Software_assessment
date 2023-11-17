@@ -1,7 +1,4 @@
 # script to hold functions
-import pandas as pd
-import requests
-
 # Get information from test directory
 
 def get_target_ngtd(testID):
@@ -34,3 +31,12 @@ def get_target_panelapp(testID):
     return result_panelapp
 
 # test user inputs
+
+def check_testID(testID):
+
+    # check the ID begins with R
+    if testID[:1] != "R":
+        result = "invalid R code"
+    else:
+        result = "Valid R code recieved"
+    return result
