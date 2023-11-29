@@ -13,7 +13,8 @@ N.B. It is important that when running the tool you run from root directory and 
 
 ## Folder structure ##
 
-Overview of the files structure
+```
+Overview of the file structure
 .
 ├── bin
 │   └── README.md
@@ -35,6 +36,7 @@ Overview of the files structure
 ├── test.py
 └── tests
     └── README.md
+```
 
 ## Branches ##
 
