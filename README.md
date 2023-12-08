@@ -35,3 +35,9 @@ Issue branches - branches linked to an issue or requested change. Once happy wil
 - new user requirement documented in issue
 - bulletpoint broken down steps to meet requirement
 - add issue to KanBan board 
+
+
+# How to run #
+
+You can run by going into the frontend folder and typing:
+python manage.py runserver
