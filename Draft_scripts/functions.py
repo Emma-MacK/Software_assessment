@@ -96,7 +96,6 @@ def call_transcript_make_bed(HGNC_list, flank):
             print(json_dict['error'])
             exit()
 
-
         # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
         print("JSON found")
         transcripts_dict = json_dict["transcripts"][0]
