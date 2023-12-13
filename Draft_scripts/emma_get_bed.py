@@ -1,7 +1,4 @@
 # script for me to get bed file
-import requests
-import json
-import pandas
 
 from functions import call_transcript_make_bed
 
@@ -11,7 +8,7 @@ from functions import call_transcript_make_bed
 
 
 # HGNC will be called from raymond's section
-HGNC = ["1100", "4562"]
+HGNC = [123, "4562"]
 # HGNC will be an argparse value (default 0)
 flank = 25
 call_transcript_make_bed(HGNC, flank)
