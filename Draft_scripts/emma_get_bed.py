@@ -10,8 +10,13 @@ import pandas
 def call_transcript_make_bed(HGNC_list, flank):
     url_base = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A"
     transcript_filter = "/mane_select/refseq/GRCh37"
-    for HGNC in HGNC_list:
 
+    print("Making bed file for gene list:" + str(HGNC_list))
+    concat_filename = "panel_output.bed"
+    with open(concat_filename, 'w') as f:
+        f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
+
+    for HGNC in HGNC_list:
         full_url = url_base + str(HGNC)+ transcript_filter
         print("querying: " + full_url)
         try:
@@ -29,12 +34,7 @@ def call_transcript_make_bed(HGNC_list, flank):
         transcripts_dict= transcripts_list[0]
 
         # keys in subsection ['annotations', 'coding_end', 'coding_start', 'description', 'genomic_spans', 'length', 'reference', 'translation']
-
-        # make bedfile header
-        print("Making bed file for HGNC:" + str(HGNC))
-        filename = HGNC + "_output.bed"
-        with open(filename, 'w') as f:
-            f.write("Chromosome\tstart\tend\tname\texon\n")
+        # print(json_dict)
 
         # get chromosome for BED
         annotations_dict = transcripts_dict["annotations"]
@@ -53,20 +53,37 @@ def call_transcript_make_bed(HGNC_list, flank):
         with open(json_name, "w") as outfile:
             outfile.write(json_object)
 
+        # make bedfile header
+        print("Making bed file for HGNC:" + str(HGNC))
+        filename = HGNC + "_output.bed"
+        with open(filename, 'w') as f:
+            f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
+
+        # build bed file
+        genomic_spans_dict = transcripts_dict["genomic_spans"]
 
         # get start and end position for BED for each transcript
-        genomic_spans_dict = transcripts_dict["genomic_spans"]
         for key in genomic_spans_dict:
             temp_dict = genomic_spans_dict[key]
             exon_list = temp_dict["exon_structure"]
+
+        # get strand for bed, held in orientation. 1 = +, -1 = -
+            if temp_dict["orientation"] == 1:
+                sense = "+"
+            elif temp_dict["orientation"] ==-1:
+                sense = "-"
+            else:
+                sense = "NA"
             for item in exon_list:
                 start = int(item["genomic_start"]) - flank
                 end = int(item["genomic_end"]) + flank
-                exon = item["exon_number"]
+                label = str(key)+ "_" + json_dict["current_symbol"] +"_exon_"+ str(item["exon_number"])
                 # for each transcript reference, add to bed file
                 with open(filename, 'a') as f:
-                    f.write(chromosome + "\t" + str(start) + "\t" + str(end) + "\t" + str(key) + "\t" + "exon_" +str(exon) + "\n")
-
+                    f.write(chromosome + "\t" + str(start) + "\t" + str(end) + "\t" + label + "\t" + str(0) +"\t" + sense + "\n")
+                # add to big bed file
+                with open(concat_filename, 'a') as f:
+                    f.write(chromosome + "\t" + str(start) + "\t" + str(end) + "\t" + label + "\t" + str(0) +"\t" + sense + "\n")
 # HGNC will be called from raymond's section
 HGNC = ["1100", "4562"]
 # HGNC will be an argparse value (default 0)
