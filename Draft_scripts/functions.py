@@ -7,7 +7,7 @@ import pandas as pd
 
 def get_target_ngtd(testID):
     # get an excel into a pandas dataframe, getting specific columns
-    # does the file exist?
+    # does the file exist? - incorparate Elena's functions when available
     xls = 'Rare-and-inherited-disease-national-genomic-test-directory-version-5.1.xlsx'
     test_directory_df = pd.read_excel(xls, 'R&ID indications', usecols="A:E", header=1)
 
@@ -24,21 +24,25 @@ def get_target_ngtd(testID):
 def get_target_panelapp(testID):
 
     # panelapp server
+    # is there a way to set panel app version?
     server = "https://panelapp.genomicsengland.co.uk/api/v1"
     # insert R code
     ext = "/panels/" + testID
 
     # adds server and ext with id
-    # check this is possible, what is internet is down
-    r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+    try:
+        r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+        decoded = r.json()
+        result_panelapp = repr(decoded)
+        return result_panelapp
 
-    #returns data
-    decoded = r.json()
-    result_panelapp = repr(decoded)
-    return result_panelapp
+    except requests.exceptions.RequestException as e:
+            # get details of exception
+        print("An exception occurred connecting to PanelApp")
+        raise SystemExit(e)
+        exit()
 
 # test user inputs
-
 def check_testID(testID):
     in_test_directory=get_target_ngtd(testID)
     # check the ID begins with R
