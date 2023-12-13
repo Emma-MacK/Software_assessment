@@ -1,3 +1,0 @@
-Django==4.2.7
-pandas==2.1.4
-Requests==2.31.0

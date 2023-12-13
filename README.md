@@ -1,43 +1,61 @@
-# Project Goal #
- A tool to manage gene panels for NHS National genomic test directory tests in the laboratory
+# Panel Assigner v1 (holding name) #
 
+## APP usage ##
+Using argParser the Rcode TestID is used to pull panel information from either the National Genomic Test Directory (NGTD) or PanelAppD
 
-# APP NAME #
+Required Inputs:
+1) Test directory code: -ID followed by test code ("RXXX")
+2) Panel source being used: -PanS followed by "NGTD" (ie National Genomic Test Directory) or "PanelApp"
 
-if this was a repository for an app then the description of the app (What it does, typical uses, inputs, outputs, known limitations) would go here 
+e.g. python3 src/tool.py -ID <"RXXX"> -PanS <"NGTD"> or <"PanelApp">
 
+N.B. It is important that when running the tool you run from root directory and specify the file directory of the python script. This is to ensure access to the excel file in the root directory
 
+## Folder structure ##
 
-# APP usage #
+```
+Overview of the file structure
+.
+├── bin
+│   └── README.md
+├── docs
+│   └── README.md
+├── Draft_scripts
+│   └── emma_get_bed.py
+├── environment.yml
+├── Issue11.py
+├── LICENCE
+├── Rare-and-inherited-disease-national-genomic-test-directory-version-5.1.xlsx
+├── README.md
+├── src
+│   ├── README.md
+│   ├── requirements.txt
+│   ├── tool.py
+│   └── unusedclasses
+│       └── argument_parser.py
+├── test.py
+└── tests
+    └── README.md
+```
 
-description of the app, inputs, outputs, etc
+## Branches ##
 
-
-# Folder structure #
-
-Overview of the files structure 
-
-Files:
-modules.py – all the functions we create are held here to be called into the final script
-tests.py, contains tests for each of the created functions, ensuring they work + also environment tests
-main.py – the main script that calls the modules, runs the tests and performs the desired process.
-
-For each added functionality, create and test function individually, add to modules.py, create a test in tests.py, add to main script.
-
-# Branches #
-
-Main - the current minimally functional version of the product. The current release
+Main - the current minimally functional version of the product. The current release is v1
 Develop - branch of product in the development. Branches will be merged into here to ensure changes don't clash
-Issue branches - branches linked to an issue or requested change. Once happy will be merged into develop. 
+Issue branches - branches linked to an issue or requested change. Once happy will be merged into develop.
 
-# Issue Process for user requirement #
+## Issue Process for user requirement ##
 
 - new user requirement documented in issue
 - bulletpoint broken down steps to meet requirement
-- add issue to KanBan board 
+- add issue to KanBan board
 
 
 # How to run #
 
 You can run by going into the frontend folder and typing:
 python manage.py runserver
+
+## Plans for future development ##
+
+Any current plans for future development are recorded in git issues.The desired end product is a tool to manage gene panels for NHS National genomic test directory tests in the laboratory and use this to record the testing carried out for individual patients. 
