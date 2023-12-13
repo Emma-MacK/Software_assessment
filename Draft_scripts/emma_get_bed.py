@@ -14,7 +14,7 @@ def call_transcript_make_bed(HGNC_list, flank):
     print("Making bed file for gene list:" + str(HGNC_list))
     concat_filename = "panel_output.bed"
     with open(concat_filename, 'w') as f:
-        f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
+        f.write("chrom\tchromStart\tchromEnd\tname\tscore\tstrand\n")
 
     for HGNC in HGNC_list:
         full_url = url_base + str(HGNC)+ transcript_filter
@@ -38,7 +38,7 @@ def call_transcript_make_bed(HGNC_list, flank):
 
         # get chromosome for BED
         annotations_dict = transcripts_dict["annotations"]
-        chromosome = str(annotations_dict["chromosome"])
+        chromosome = "chr"+str(annotations_dict["chromosome"])
 
         # get the info for database and write into json
         database_dict = {
@@ -84,6 +84,8 @@ def call_transcript_make_bed(HGNC_list, flank):
                 # add to big bed file
                 with open(concat_filename, 'a') as f:
                     f.write(chromosome + "\t" + str(start) + "\t" + str(end) + "\t" + label + "\t" + str(0) +"\t" + sense + "\n")
+
+
 # HGNC will be called from raymond's section
 HGNC = ["1100", "4562"]
 # HGNC will be an argparse value (default 0)
