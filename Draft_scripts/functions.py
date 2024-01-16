@@ -101,6 +101,7 @@ def call_transcript_make_bed(HGNC_list, flank):
 
         # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
         print("JSON found")
+        print(json_dict)
         transcripts_list = json_dict["transcripts"]
         transcripts_dict= transcripts_list[0]
 
@@ -113,7 +114,10 @@ def call_transcript_make_bed(HGNC_list, flank):
 
         # get the info for database and write into json
         database_dict = {
-            "refseq" : transcripts_dict["reference"],
+            "gene_name": json_dict["current_name"],
+            "hgnc_ID": json_dict["hgnc"],
+            "hgnc_symbol": json_dict["current_symbol"],
+            "refseq_id" : transcripts_dict["reference"],
             "ensembl_select" : str(annotations_dict["ensembl_select"]),
             "mane_plus_clinical" : str(annotations_dict["mane_plus_clinical"]),
             "mane_select" : str(annotations_dict["mane_select"])
