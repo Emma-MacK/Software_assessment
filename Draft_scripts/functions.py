@@ -99,15 +99,25 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build, transcript_set, lim
         # if the gene symbol does not exist returns {'error': 'Unable to recognise gene symbol NO DATA', 'requested_symbol': 'NO DATA'}
         # if json_dict["error"] exists print the error and exit
         if 'error' in json_dict:
-            print("An error occured with variant validator")
+            print("An error occured with variant validator: No data available for this request")
             print(json_dict['error'])
             exit()
 
         # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
         print("JSON found")
-        print(json_dict)
         transcripts_list = json_dict["transcripts"]
+
+        # case where entry (using genome_build = "GRCh38", transcript_set = "ensembl", limited_transcripts = "select")
+        # produced empty "transcripts" dict in json. Set up code to return informative message
+        # empty dicts == false in python
+
+        if not transcripts_list:
+            print(json_dict)
+            print("No transcript information available, cannot produce bed file for this request")
+            exit()
+
         transcripts_dict= transcripts_list[0]
+
 
         # keys in subsection ['annotations', 'coding_end', 'coding_start', 'description', 'genomic_spans', 'length', 'reference', 'translation']
         # print(json_dict)
