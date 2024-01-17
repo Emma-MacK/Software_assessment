@@ -31,9 +31,12 @@ def test_file_content():
         # mock calls for header and content are seperate, remove header by spliting on strand
         expected_bed_data = str(file.read()).split("strand\n")[1]
 
+    with open('test_expected_4562_output.json', 'r') as file:
+        expected_json = str(file.read())
+
     # each mock call will be for a seperate line
     expected_data_rows = expected_bed_data.split("\n")
-    print(expected_data_rows)
+
     # each mock call will include \n at the end bar the last row, so re add
     for i in range(0,len(expected_data_rows) -1):
         expected_data_rows[i]= expected_data_rows[i] + "\n"
@@ -52,11 +55,14 @@ def test_file_content():
     with patch("functions.open", mock_open_files, create=True):
         call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
 
-    row_calls = mock_open_files().write.call_args_list
+    observed_calls = mock_open_files().write.call_args_list
     # check that while running call_transcript_make_bed, the expected rows were added to the mock files
     # go by length so can ignore empty row at the end
     for row in range(0,len(expected_data_rows) -1):
-        assert call(expected_data_rows[row]) in row_calls
+        assert call(expected_data_rows[row]) in observed_calls
+
+    # Check the mock json was matches data from expected data
+    assert call(expected_json) in observed_calls
 
 # given incorrect input, expect informaticve error message
 # output bedfile can be used by bedtools
