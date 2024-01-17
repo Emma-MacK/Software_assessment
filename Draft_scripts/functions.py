@@ -68,9 +68,14 @@ def check_testID(testID):
             result = "R code found in test directory: \n" + in_test_directory
     return result
 
-def call_transcript_make_bed(HGNC_list, flank):
+def call_transcript_make_bed(HGNC_list, flank, genome_build, transcript_set, limited_transcripts):
+    # Once all scripts are combined, either have as options with defauls for command line or dropdown on django app:
+    # genome build: GRCh37, GRCh38, or all
+    # for transcript set: refseq, ensembl, or all
+    # for limited transcripts: mane_select, mane, select
+
     url_base = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A"
-    transcript_filter = "/mane_select/refseq/GRCh37"
+    transcript_filter = "/" + limited_transcripts + "/" + transcript_set + "/" + genome_build
 
     # make empty bed file
     print("Making bed file for gene list:" + str(HGNC_list))
@@ -78,7 +83,6 @@ def call_transcript_make_bed(HGNC_list, flank):
     with open(concat_filename, 'w') as f:
         f.write("chrom\tchromStart\tchromEnd\tname\tscore\tstrand\n")
 
-    # is there a way to do this without a set path?
     # Check HGNC list
     for HGNC in HGNC_list:
         full_url = url_base + str(HGNC)+ transcript_filter
