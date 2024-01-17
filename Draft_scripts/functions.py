@@ -3,11 +3,18 @@
 import requests
 import json
 import pandas as pd
-# Get information from test directory
 
 def get_target_ngtd(testID):
-    # get an excel into a pandas dataframe, getting specific columns
-    # does the file exist? - incorparate Elena's functions when available
+    """Get the genes in a panel from the NGTD for an testID
+
+    Args:
+        testID (str): The ID of a specific test in the format Rxx
+
+    Returns:
+        result_ngtd: A series (column from a pandas dataframe) of the target genesfor a given test ID
+    """
+
+    # trun xlsx database into pandas dataframe
     xls = 'Rare-and-inherited-disease-national-genomic-test-directory-version-5.1.xlsx'
     test_directory_df = pd.read_excel(xls, 'R&ID indications', usecols="A:E", header=1)
 
@@ -19,17 +26,26 @@ def get_target_ngtd(testID):
     result_ngtd = panel['Target/Genes'].to_string(index=False)
     return result_ngtd
 
-# get information from panel app
 
 def get_target_panelapp(testID):
 
-    # panelapp server
-    # is there a way to set panel app version?
+    """ Get panel information from panel app for the given test ID
+
+    Args:
+        testID (str): The ID of a specific test in the format Rxx
+
+    Raises:
+        SystemExit: Unable to connect to panel app
+
+    Returns:
+        result_panelapp: The json file returned from querying panelapp, holds information for the given R code
+    """
+
     server = "https://panelapp.genomicsengland.co.uk/api/v1"
     # insert R code
     ext = "/panels/" + testID
 
-    # adds server and ext with id
+    # use try and except to handle errors connecting to panelapp
     try:
         r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
         decoded = r.json()
@@ -42,8 +58,17 @@ def get_target_panelapp(testID):
         raise SystemExit(e)
         exit()
 
-# test user inputs
 def check_testID(testID):
+    """Test the given R code to ensure it is in the correct format
+      and check it exists in the test directory
+
+    Args:
+        testID (str): The ID of a specific test in the format Rxx
+
+    Returns:
+        result (str): A printed string informing user of an incorrect format,
+        or prompt the user to continue if the R code does not exist in the test directory
+    """
     in_test_directory=get_target_ngtd(testID)
     # check the ID begins with R
     if testID[:1] != "R":
@@ -68,12 +93,22 @@ def check_testID(testID):
             result = "R code found in test directory: \n" + in_test_directory
     return result
 
-def call_transcript_make_bed(HGNC_list, flank, genome_build, transcript_set, limited_transcripts):
-    # Once all scripts are combined, either have as options with defauls for command line or dropdown on django app:
-    # genome build: GRCh37, GRCh38, or all
-    # for transcript set: refseq, ensembl, or all
-    # for limited transcripts: mane_select, mane, select
 
+def call_transcript_make_bed(HGNC_list, flank, genome_build,
+                             transcript_set, limited_transcripts):
+    """A function that uses the HGNC ID from the panelapp json
+    to gather gene info from variant validator's gene to transcript tool
+    Builds a bed file and a json file for use in our database
+
+    Args:
+        HGNC_list (str): A gene ID to query in variant validator
+        flank (int): The number of bases add as a flank to regions in bed file
+        genome_build (str): The genome build to use. GRCh37, GRCh38, or all
+        transcript_set (str): the transcript source to use. refseq, ensembl, or all
+        limited_transcripts (str): The transcripts to use. mane_select, mane, select
+    """
+
+    # build the url for connecting to variant validator
     url_base = "https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A"
     transcript_filter = "/" + limited_transcripts + "/" + transcript_set + "/" + genome_build
 
