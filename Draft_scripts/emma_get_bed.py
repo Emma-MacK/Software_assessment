@@ -10,7 +10,7 @@ from functions import call_transcript_make_bed
 HGNC = [123, "4562"]
 # HGNC will be an argparse value (default 0)
 flank = 25
-genome_build = "GRCh38"
-transcript_set = "ensembl"
-limited_transcripts = "select"
+genome_build = "GRCh37"
+transcript_set = "refseq"
+limited_transcripts = "mane_select"
 call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
