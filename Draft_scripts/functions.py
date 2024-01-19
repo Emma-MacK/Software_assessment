@@ -42,8 +42,8 @@ def get_target_panelapp(testID):
     """
 
     server = "https://panelapp.genomicsengland.co.uk/api/v1"
-    # insert R code
-    ext = "/panels/" + testID
+    # insert R code, panel app does not seem to work with R at start, so stripping R from string
+    ext = "/panels/" + testID[1:]
 
     # use try and except to handle errors connecting to panelapp
     try:
@@ -57,6 +57,22 @@ def get_target_panelapp(testID):
         print("An exception occurred connecting to PanelApp")
         raise SystemExit(e)
         exit()
+
+def get_hgncIDs(result_panelapp):
+    # The format is incorrect, need to switch from single quote to double quote
+    test = result_panelapp.replace("'","\"")
+    panel_json = eval(test)
+    gene_info = panel_json["genes"]
+    all_IDs = []
+    # there are multiple genes in the list, loop over to get all HGNC ids
+    for i in range(1,len(gene_info)):
+        gene_info_item = gene_info[i]
+        gene_data = gene_info_item['gene_data']
+        hgnc_id = gene_data["hgnc_id"]
+        all_IDs.append(hgnc_id)
+
+    all_IDs = ' '.join(all_IDs).replace('HGNC:','').split()
+    return all_IDs
 
 def check_testID(testID):
     """Test the given R code to ensure it is in the correct format
