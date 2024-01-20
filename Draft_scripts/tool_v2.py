@@ -15,6 +15,7 @@ testID = args.testID
 # specifying location of NGTD file and saving all files to variable files.
 # NGTD file available in repo is from version 5.1. of the genomic test
 NGTD_DIRECTORY = 'test_directory_file'
+# TODO: Consider changing file location to a mounted volume when implementing docker.
 
 # specifyng generic NGTD download link which can be modified by adding X.X.xlsx where X stands for a number
 NGTD_LINK = "https://www.england.nhs.uk/wp-content/uploads/2018/08/Rare-and-inherited-disease-national-genomic-test-directory-version-"

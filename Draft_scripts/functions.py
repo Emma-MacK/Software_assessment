@@ -91,7 +91,6 @@ def get_ngtd_version(file):
     """This function pulls the version of the the NGTD from within the file."""
     # Loading Columns A of file into a Dataframe
     test_directory_df = pd.read_excel(file, 'R&ID indications', usecols="A", header=0)
-    # TODO: Tidy up with the panda call that Emma has already done.
 
     #extracting and cleaning data from first row
     test_directory_header = str(test_directory_df.iloc[0])
@@ -105,7 +104,7 @@ def get_ngtd_version(file):
 
     return version
 
-def update_ngtd(version, file_directory, link):
+def update_ngtd(version, file_directory, link, perform_file_write=True):
     """This function attempts to update the version of the NGTD computationally if the current version is nolonger available.
       If it fails it gives the user the option to proceed with existing copy"""
     # NOTE: Had previously tried to do this with a try block but couldn't think through the logic.
@@ -126,21 +125,25 @@ def update_ngtd(version, file_directory, link):
     if response.status_code == 200:
         print(response.status_code)
         # TODO: Add logging to record response code and that this means file is still current.
-        with open(f'NGTDv{version_new}.xlsx', 'wb') as output:
-            output.write(response.content)
+        if perform_file_write:
+            path_new_file = os.path.join(file_directory, f"NGTDv{version_new}.xlsx")
+            with open(path_new_file, 'wb') as output:
+                output.write(response.content)
         update_status = "passed"
 
     # Try to see if a copy of the file can be obtained assuming a major update has been made.
     elif response.status_code == 404:
         print(response.status_code)
-        version_new = floor(float(version)) + 1.0 # TODO: This can not be tested because no major update is currently available. I will need to test with logging
+        version_new = floor(float(version)) + 1.0
         # TODO: Add logging to record the version number tried.
         print(version_new)
         response = requests.get(link + f"{version_new}.xlsx", timeout=60)
         if response.status_code == 200:
             # TODO: Add logging to record response code. Do this throughout this function
-            with open(f'NGTDv{version_new}.xslx', 'wb') as output:
-                output.write(response.content)
+            if perform_file_write:
+                path_new_file = os.path.join(file_directory, f"NGTDv{version_new}.xlsx")
+                with open(path_new_file, 'wb') as output:
+                    output.write(response.content)
             update_status = "passed"
                 # TODO: Check where the output file is being written to.
         elif response.status_code == 404:
@@ -148,10 +151,11 @@ def update_ngtd(version, file_directory, link):
             print(version_new)
             response = requests.get(link +f"{version_new}.xlsx", timeout=60)
             if response.status_code == 200:
-                path_new_file = os.path.join(file_directory, f"NGTDv{version_new}.xlsx")
                 print(response.status_code)
-                with open(path_new_file, 'wb') as output:
-                    output.write(response.content)
+                if perform_file_write:
+                    path_new_file = os.path.join(file_directory, f"NGTDv{version_new}.xlsx")
+                    with open(path_new_file, 'wb') as output:
+                        output.write(response.content)
                 update_status = "passed"
             else:
                 update_status = "failed"
@@ -184,7 +188,7 @@ def check_ngtd(file_directory, link):
         # TODO: For loop might be excessive since we only expect one file. Also what happens if there is more than one file?
         if get_file_age_in_days(ngtd_path) < 30:
             # TODO: Add logging of file age
-            print('File is less than 30 days old')
+            ngtd_status = "NGTD file younger than 30 days"
             continue
         elif get_file_age_in_days(ngtd_path) >= 30:
             # TODO: Add logging of file age
@@ -204,7 +208,7 @@ def check_ngtd(file_directory, link):
                       )
                 update_status, version_new = update_ngtd(version, file_directory, link)
                 if update_status == "passed":
-                    os.remove(ngtd_path)
+                    os.remove(ngtd_path) # removing old NGTD version
                     ngtd_status = f"NGTDv{version} nolonger valid. Successfully updated to NGTDv{version_new}"
                     version = version_new
                 elif update_status == "failed":
@@ -222,12 +226,7 @@ def check_ngtd(file_directory, link):
                             continue
                         else:
                             want_continue = input("Please enter y or n: ").lower()
-            elif response.status_code == 400:
-                print("Error in establishing connecting to the internet")
-                # TODO: add asking if to continue with old version.
-
-            else:
-                print("Function failed") # TODO This is temporary. Replace with something else.
+            # TODO Add exception handeling for when there is no internet connection.
 
     return ngtd_status, version
 
