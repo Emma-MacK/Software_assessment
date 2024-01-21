@@ -3,6 +3,10 @@
 import requests
 import json
 import pandas as pd
+import logging
+
+# Create or get the logger for the current module
+logger = logging.getLogger(__name__)
 
 def get_target_ngtd(testID):
     """Get the genes in a panel from the NGTD for an testID
@@ -11,7 +15,7 @@ def get_target_ngtd(testID):
         testID (str): The ID of a specific test in the format Rxx
 
     Returns:
-        result_ngtd: A series (column from a pandas dataframe) of the target genesfor a given test ID
+        result_ngtd: A series (column from a pandas dataframe) of the target genes for a given test ID
     """
 
     # trun xlsx database into pandas dataframe
@@ -76,21 +80,21 @@ def check_testID(testID):
     # elif does not exist in the test directory
     else:
         if in_test_directory == "Series([], )":
-            want_continue = "Please enter y or n"
-            result = "R does not exist in test directory"
-            print(result)
+            print("Test ID not found within the national genomic test directory")
             # ask user if they want to continue
+            want_continue = "Please enter y or n"
             while want_continue == "Please enter y or n":
                 want_continue = input("Do you want to continue with a code not in the test directory? [y/n]: ")
                 if want_continue == "y":
-                    print("Proceeding with " + testID)
+                    result = f"Proceeding with test ID {testID} anyway"
+                    print(result)
                 elif want_continue == "n":
                     exit()
                 else:
                     want_continue = "Please enter y or n"
                     print(want_continue)
         else:
-            result = "R code found in test directory: \n" + in_test_directory
+            result = "R code found in test directory"
     return result
 
 
