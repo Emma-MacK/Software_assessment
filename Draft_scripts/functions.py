@@ -193,40 +193,54 @@ def check_ngtd(file_directory, link):
         elif get_file_age_in_days(ngtd_path) >= 30:
             # TODO: Add logging of file age
             print('File is older than 30 days old')
-            response = requests.get(link + f"{version}.xlsx", timeout=60)
-            if response.status_code == 200:
-                # TODO: Add logging of successful error code.
-                print(response.status_code)
-                ngtd_status = "NGTD version valid"
-                continue
-            elif response.status_code == 404:
-                # TODO: Add logging of failed access
-                # TODO: Add proper error handeling.  Might require learning how to raise custom errors.
-                print(response.status_code)
-                print("The current version of of the NGTD is nolonger valid."
-                      "Attempting to download the updated version of the national genomic test directory"
-                      )
-                update_status, version_new = update_ngtd(version, file_directory, link)
-                if update_status == "passed":
-                    os.remove(ngtd_path) # removing old NGTD version
-                    ngtd_status = f"NGTDv{version} nolonger valid. Successfully updated to NGTDv{version_new}"
-                    version = version_new
-                elif update_status == "failed":
-                    update_failed = ("An updated version of the NGTD could not be found. To resolve this reach out to your "
-                                            "Bioinformatics department"
-                                            )
-                    print(update_failed)
-                    want_continue = ""
-                    while want_continue == "":
-                        want_continue = input("Do you want to continue with the existing version of the NGTD? [y/n]: ").lower()
-                        if want_continue == "n":
-                            exit()
-                        elif want_continue == "y":
-                            ngtd_status = f"NGTDv{version} nolonger valid. Proceeding with old version test directory"
-                            continue
-                        else:
-                            want_continue = input("Please enter y or n: ").lower()
-            # TODO Add exception handeling for when there is no internet connection.
+            try:
+                response = requests.get(link + f"{version}.xlsx", timeout=60)
+                if response.status_code == 200:
+                    # TODO: Add logging of successful error code.
+                    print(response.status_code)
+                    ngtd_status = "NGTD version valid"
+                    continue
+                elif response.status_code == 404:
+                    # TODO: Add logging of failed access
+                    # TODO: Add proper error handeling.  Might require learning how to raise custom errors.
+                    print(response.status_code)
+                    print("The current version of of the NGTD is nolonger valid."
+                        "Attempting to download the updated version of the national genomic test directory"
+                        )
+                    update_status, version_new = update_ngtd(version, file_directory, link)
+                    if update_status == "passed":
+                        os.remove(ngtd_path) # removing old NGTD version
+                        ngtd_status = f"NGTDv{version} nolonger valid. Successfully updated to NGTDv{version_new}"
+                        version = version_new
+                    elif update_status == "failed":
+                        update_failed = ("An updated version of the NGTD could not be found. To resolve this reach out to your "
+                                                "Bioinformatics department"
+                                                )
+                        print(update_failed)
+                        want_continue = ""
+                        while want_continue == "":
+                            want_continue = input("Do you want to continue with the existing version of the NGTD? [y/n]: ").lower()
+                            if want_continue == "n":
+                                exit()
+                            elif want_continue == "y":
+                                ngtd_status = f"NGTDv{version} nolonger valid. Proceeding with old version test directory"
+                                continue
+                            else:
+                                want_continue = input("Please enter y or n: ").lower()
+            except requests.exceptions.RequestException as e:
+                # get details of exception
+                print("An exception occurred connecting to national genomic test directory")
+                want_continue = ""
+                while want_continue == "":
+                            want_continue = input("Do you want to continue with the existing version of the NGTD? [y/n]: ").lower()
+                            if want_continue == "n":
+                                raise SystemExit(e)
+                            elif want_continue == "y":
+                                ngtd_status = f"Proceeding with existing version version test directory: {version}"
+                                break
+                            else:
+                                want_continue = input("Please enter y or n: ").lower()
+                # TODO add logging
 
     return ngtd_status, version
 
