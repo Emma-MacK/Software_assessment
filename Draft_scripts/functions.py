@@ -9,11 +9,14 @@ import requests
 import pandas as pd
 
 
-def get_target_ngtd(testID):
+def get_target_ngtd(testID, file_directory, version):
     """Get the genes in a panel from the NGTD for an testID
 
     Args:
-        testID (str): The ID of a specific test in the format Rxx
+    - testID (str): The ID of a specific test in the format Rxx
+    - file_directory: The relative OR absolute path to the directory
+    where the NGTD file is saved.
+    - version: The version number of the NGTD
 
     Returns:
         result_ngtd: A series (column from a pandas dataframe) of the target genesfor a given test ID
@@ -62,18 +65,21 @@ def get_target_panelapp(testID):
         exit()
 
 
-def check_testID(testID):
+def check_testID(testID, file_directory, version):
     """Test the given R code to ensure it is in the correct format
       and check it exists in the test directory
 
     Args:
-        testID (str): The ID of a specific test in the format Rxx
+    - testID (str): The ID of a specific test in the format Rxx
+    - file_directory: The relative OR absolute path to the directory
+    where the NGTD file is saved.
+    - version: The version number of the NGTD
 
     Returns:
         result (str): A printed string informing user of an incorrect format,
         or prompt the user to continue if the R code does not exist in the test directory
     """
-    in_test_directory=get_target_ngtd(testID)
+    in_test_directory=get_target_ngtd(testID, file_directory, version)
     # check the ID begins with R
     if testID[:1] != "R":
         result = "invalid R code format"
@@ -99,7 +105,7 @@ def check_testID(testID):
 
 def get_file_age_in_days(file_path):
     """Gets the age of a file in days
-    
+
     Args:
     - file_path: The relative OR absolute path to the file location
 
@@ -124,7 +130,7 @@ def get_ngtd_version(file_path):
     """Parses the NGTD version number from within the file.
 
     Args:
-    - file: The relative OR absolute path to the file location
+    - file_path: The relative OR absolute path to the file location
 
     Returns:
     - version: Returns the version number as a string output
@@ -238,7 +244,7 @@ def check_ngtd(file_directory, link):
 
     Args:
     - file_directory: The relative OR absolute path to the directory
-    where the updated file should be saved
+    where the NGTD file is saved.
     - link: The link to where the NGTD directory is sourced. This should
     always be the constant variable "NGTD" specified in tool_v2.py
 
