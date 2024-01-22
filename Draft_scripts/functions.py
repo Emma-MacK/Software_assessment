@@ -59,6 +59,15 @@ def get_target_panelapp(testID):
         exit()
 
 def get_hgncIDs(result_panelapp):
+
+    """Take the result of the panel app query and extract HGNC IDs
+
+    Args:
+        result_panelapp (str): A json file in string format, returned from querying panel app
+
+    Returns:
+        all_IDs (list): A list of HGNC ids for the genes in a panel
+    """
     # The format is incorrect, need to switch from single quote to double quote
     test = result_panelapp.replace("'","\"")
     panel_json = eval(test)
