@@ -4,8 +4,6 @@ WORKDIR .
 
 COPY . .
 
-ENTRYPOINT [ "bash"]
-
 RUN pip install --upgrade pip
 RUN pip install -r src/requirements.txt
 
