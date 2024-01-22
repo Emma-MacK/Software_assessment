@@ -53,7 +53,7 @@ def get_target_panelapp(testID):
 
     # use try and except to handle errors connecting to panelapp
     try:
-        r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+        r = requests.get(server+ext, headers={ "Content-Type" : "application/json"}, timeout=120)
         decoded = r.json()
         result_panelapp = repr(decoded)
         return result_panelapp
@@ -163,7 +163,7 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         full_url = url_base + str(hgnc)+ transcript_filter
         print("querying: " + full_url)
         try:
-            r = requests.get(full_url, headers={ "content-type" : "application/json"})
+            r = requests.get(full_url, headers={ "content-type" : "application/json"}, timeout=120)
             decoded = r.json()
             # print(repr(decoded))
             json_dict = decoded[0]
