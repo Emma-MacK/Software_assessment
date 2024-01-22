@@ -3,18 +3,33 @@ from django.shortcuts import render, redirect
 
 from userinterface.forms import ContactForm
 from django. contrib import messages
+from userinterface.ToolModule import tool
+
+"""
+from userinterface.ToolModule import functions 
+from userinterface.ToolModule import tool_v2
+from userinterface.ToolModule import emma_get_bed
+
+"""
+
+
+#print(sys.path)
 """
 This views.py file takes in the scripts from the backend as well
 as interact with the display of data. It
 1) It imports the tool.py module
 2) 
 """
-
+"""
 import sys
 sys.path.insert(0, "/home/raymondmiles/Software_assessment/src/ToolModule")
 import tool
  # insert the path to the folder
 sys.path.insert(0, "/home/raymondmiles/Software_assessment/frontend/userinterface")
+
+
+"""
+
 
 def contact(request):
   """ 
