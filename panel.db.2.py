@@ -1,6 +1,7 @@
 import csv
 import sqlalchemy
 import pandas as pd
+import json
 
 from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, Float, Boolean, insert
 from sqlalchemy.ext.declarative import declarative_base
@@ -40,14 +41,14 @@ class Genes(Base):
 
     genes_table_id = Column("Genes Table ID", Integer, primary_key=True)
     panel_id_v = Column(Integer, ForeignKey("panels.Panel ID and Version Number"))
-    gene_name = Column("Gene Name", String)
-    hgnc_id = Column("HGNC ID", String)
-    hgnc_symbol = Column("HGNC Symbol", String)
+    gene_name = Column("gene_name", String)
+    hgnc_id = Column("hgnc_ID", String)
+    hgnc_symbol = Column("hgnc symbol", String)
     omim_no = Column("OMIM", String)
-    refseq_id = Column("Refseq ID", String)
-    ensembl_select = Column("Ensembl Select", Boolean)
-    main_select = Column("Main Select", Boolean)
-    main_clinical = Column("Main Clinical", Boolean)
+    refseq_id = Column("refseq_id", String)
+    ensembl_select = Column("ensembl_select", Boolean)
+    main_select = Column("main_select", Boolean)
+    main_clinical = Column("main_plus_clinical", Boolean)
 
     def __repr__(self):
 
@@ -70,8 +71,28 @@ with Session(engine) as session:
 
     session.add_all([
         Panels(panel_id_v="1", date="01012023", patient_id="1", accession_no="1", r_number="000", gene_list="gene,list"),
-        Genes(genes_table_id="1", panel_id_v="1", gene_name="gene", hgnc_id="HGNC:id", hgnc_symbol="symbol", omim_no="000000", refseq_id="refseq_id", \
+        Genes(genes_table_id="12", panel_id_v="1", gene_name="gene", hgnc_id="HGNC:id", hgnc_symbol="symbol", omim_no="000000", refseq_id="refseq_id", \
               ensembl_select=True, main_select=False, main_clinical=True)
     ])
 
     session.commit()
+
+
+
+
+# reading json data from file
+
+#with open("/home/stpuser/manchester/Software_assessment/123_VV_output.json") as f:
+ #   json_data = json.load(f)
+
+# converting json to pandas df
+
+def parse(file):
+    df = pd.read_json(file, orient='records', typ='series')
+    return df
+
+#path to json file
+parsed_json = parse("/home/stpuser/manchester/Software_assessment/123_VV_output.json")
+
+# adding df to database
+parsed_json.to_sql(name='genes', con=engine, if_exists='replace', index=True)
