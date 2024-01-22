@@ -24,6 +24,12 @@ def get_target_ngtd(testID):
 
     # print columns
     result_ngtd = panel['Target/Genes'].to_string(index=False)
+
+    # if the target is genome wide, unable to process to bed files due to syntax error
+    if "Genomewide" in result_ngtd:
+        print(result_ngtd)
+        print("This R code corresponds to genome wide testing, no bed files will be produced")
+        exit()
     return result_ngtd
 
 
@@ -76,7 +82,7 @@ def get_hgncIDs(result_panelapp):
     # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
     if panel_json["detail"] == "Not found.":
         print("This R code does not have an associated panel")
-        print("This R code may correspond to a specific mutation")
+        print("This R code may not call for an NGS test")
         exit()
 
 
