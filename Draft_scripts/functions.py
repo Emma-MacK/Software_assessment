@@ -73,7 +73,15 @@ def check_testID(testID, file_directory, version):
     return result
 
 def get_file_age_in_days(file_path):
-    """This function will return the age of a file in days based on the specified file path"""
+    """Gets the age of a file in days
+    
+    Args:
+    - file_path: The relative OR absolute path to the file location
+
+    Returns:
+    - age_in_days: variable holding the age of the file as an int.
+
+    """
     # Get the file's modification timestamp
     timestamp = os.path.getmtime(file_path)
 
@@ -87,10 +95,17 @@ def get_file_age_in_days(file_path):
     age_in_days = (current_time - modification_time).days
     return age_in_days
 
-def get_ngtd_version(file):
-    """This function pulls the version of the the NGTD from within the file."""
+def get_ngtd_version(file_path):
+    """Parses the NGTD version number from within the file.
+
+    Args:
+    - file: The relative OR absolute path to the file location
+
+    Returns:
+    - version: Returns the version number as a string output
+    """
     # Loading Columns A of file into a Dataframe
-    test_directory_df = pd.read_excel(file, 'R&ID indications', usecols="A", header=0)
+    test_directory_df = pd.read_excel(file_path, 'R&ID indications', usecols="A", header=0)
 
     #extracting and cleaning data from first row
     test_directory_header = str(test_directory_df.iloc[0])
@@ -102,20 +117,42 @@ def get_ngtd_version(file):
     section_of_header_clean = section_of_header.strip( )
     version = section_of_header_clean[1:]
 
+    # TODO: attempt to convert to float as test to see if correctly parsed.
+
     return version
 
 def update_ngtd(version, file_directory, link, perform_file_write=True):
-    """This function attempts to update the version of the NGTD computationally if the current version is nolonger available.
-      If it fails it gives the user the option to proceed with existing copy"""
+    """Makes three attempts to obtain an updated version of the NGTD"
+    1. Minor update (+ 0.1)
+    2. Major update (+ 1.0) as float
+    3. Major update (+1) as int
+
+    Args:
+    - version: The version number of the NGTD
+    - file_directory: The relative OR absolute path to the directory
+    where the updated file should be saved
+    - link: The link to where the NGTD directory is sourced. This should
+    always be the constant variable "NGTD" specified in tool_v2.py
+    - perform_file_write: Set to <true> as default. Overriding this to
+    <false> results in the updated test directory not being written to
+    an excel file.
+
+    Returns:
+    - update_status: Confirmation about whether the update succeeded or
+    failed
+    - version_new: The version number of the new NGTD. If the update
+    was unsuccessful this variable contains just and empty string
+
+    """
     # NOTE: Had previously tried to do this with a try block but couldn't think through the logic.
     # TODO: Remove print statements and replace with logging
     # Some elements of this function are bit repetetive and could maybe we streamlined into another function
 
     # update version number assuming a minor change has been made
     print(version)
+
     version_new = round(float(version) + 0.1, 1)
     print(version_new)
-
     update_status = ""
 
     # Use request to try and obtain a copy of the file with an updated version number.
@@ -159,6 +196,7 @@ def update_ngtd(version, file_directory, link, perform_file_write=True):
                 update_status = "passed"
             else:
                 update_status = "failed"
+                version_new = ""
 
     return update_status, version_new # TODO: Test if this actually returns back to the else statement or not.
 
@@ -168,8 +206,21 @@ def update_ngtd(version, file_directory, link, perform_file_write=True):
     # return # TODO: Does this successfully exit the function and move on?
 
 def check_ngtd(file_directory, link):
-    """This function checks the age of the existing NGTD version, if older than 30 days it will check whether the NGTD version
-      is still valid (i.e. available for download)"""
+    """Checks the age and validity of the NGTD version, attempting to
+    update to a more recent version if necessary.
+    N.B. Where unable to update the version user will be given the
+    option to proceed with existing version
+
+    Args:
+    - file_directory: The relative OR absolute path to the directory
+    where the updated file should be saved
+    - link: The link to where the NGTD directory is sourced. This should
+    always be the constant variable "NGTD" specified in tool_v2.py
+
+    Returns:
+    - ngtd_status: Confirmation about the status of the NGTD
+    - version: The confirmed version of the NGTD
+    """
 
     # For each file in directory checks how old the file is. If older than 30 days check if NGTD version available.
     # N.b. there should only be one file here but this saves having to specify what type of file to look for.
