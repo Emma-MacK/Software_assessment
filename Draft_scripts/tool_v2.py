@@ -38,7 +38,7 @@ ngtd_status, version = check_ngtd(NGTD_DIRECTORY, NGTD_LINK)
 print(ngtd_status) # TODO: This doesn't necessarily need to print. it could just go to logging.
 
 # using check_testID function to confirm user input
-confirmed_testid = check_testID(testID)
+confirmed_testid = check_testID(testID, NGTD_DIRECTORY, version)
 logging.info(confirmed_testid)
 
 # pulling panel information from PanelApp Api
