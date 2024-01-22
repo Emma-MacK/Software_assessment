@@ -43,7 +43,7 @@ def get_target_panelapp(testID):
 
     server = "https://panelapp.genomicsengland.co.uk/api/v1"
     # insert R code, panel app does not seem to work with R at start, so stripping R from string
-    ext = "/panels/" + testID[1:]
+    ext = "/panels/" + testID
 
     # use try and except to handle errors connecting to panelapp
     try:
@@ -110,7 +110,7 @@ def check_testID(testID):
     return result
 
 
-def call_transcript_make_bed(HGNC_list, flank, genome_build,
+def call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts):
     """A function that uses the HGNC ID from the panelapp json
     to gather gene info from variant validator's gene to transcript tool
@@ -129,14 +129,14 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
     transcript_filter = "/" + limited_transcripts + "/" + transcript_set + "/" + genome_build
 
     # make empty bed file
-    print("Making bed file for gene list:" + str(HGNC_list))
+    print("Making bed file for gene list:" + str(hgnc_list))
     concat_filename = "panel_output.bed"
     with open(concat_filename, 'w') as f:
         f.write("chrom\tchromStart\tchromEnd\tname\tscore\tstrand\n")
 
     # Check HGNC list
-    for HGNC in HGNC_list:
-        full_url = url_base + str(HGNC)+ transcript_filter
+    for hgnc in hgnc_list:
+        full_url = url_base + str(hgnc)+ transcript_filter
         print("querying: " + full_url)
         try:
             r = requests.get(full_url, headers={ "content-type" : "application/json"})
@@ -188,14 +188,14 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
             "mane_select" : str(annotations_dict["mane_select"])
         }
         json_object = json.dumps(database_dict, indent=4)
-        json_name = str(HGNC) + "_VV_output.json"
+        json_name = str(hgnc) + "_VV_output.json"
         # Writing to sample.json
         with open(json_name, "w") as outfile:
             outfile.write(json_object)
 
         # make bedfile header
-        print("Making bed file for HGNC:" + str(HGNC))
-        filename = str(HGNC) + "_output.bed"
+        print("Making bed file for HGNC:" + str(hgnc))
+        filename = str(hgnc) + "_output.bed"
         with open(filename, 'w') as f:
             f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
 

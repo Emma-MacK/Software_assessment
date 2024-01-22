@@ -36,7 +36,7 @@ print(check_testID(testID))
 genes_panelapp = get_target_panelapp(testID)
 # print(genes_panelapp)
 
-HGNC_list = get_hgncIDs(genes_panelapp)
+hgnc_list = get_hgncIDs(genes_panelapp)
 
-call_transcript_make_bed(HGNC_list, flank, genome_build,
+call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts)
