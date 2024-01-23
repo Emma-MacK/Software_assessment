@@ -6,7 +6,6 @@ from math import floor
 from datetime import datetime
 import json
 import requests
-import json
 import logging
 import logging.config
 import time
@@ -90,12 +89,49 @@ def get_target_panelapp(testID):
         return result_panelapp
 
     except requests.exceptions.RequestException as e:
-            # get details of exception
+        # get details of exception
         print("An exception occurred connecting to PanelApp")
         logging.error("Unable to connect to Panel App. System Exit raised") # TODO Sentence to long for PEP8
         raise SystemExit(e) from e
         # exit()
 
+
+def get_hgncIDs(result_panelapp):
+
+    """Take the result of the panel app query and extract HGNC IDs
+
+    Args:
+        result_panelapp (str): A json file in string format, returned from querying panel app
+
+    Returns:
+        all_IDs (list): A list of HGNC ids for the genes in a panel
+    """
+    panel_json = json.loads(result_panelapp)
+
+    # some cases return "{'detail': 'Not found.'}" indicating not in panel app
+    # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
+    if 'detail' in panel_json:
+        if panel_json['detail'] == "Not found.":
+            print("This R code does not have an associated panel")
+            print("This R code may not call for an NGS test")
+            exit()
+
+    gene_info = panel_json["genes"]
+    all_IDs = []
+    # there are multiple genes in the list, loop over to get all HGNC ids
+    for i in range(1,len(gene_info)):
+        gene_info_item = gene_info[i]
+        gene_data = gene_info_item['gene_data']
+        hgnc_id = gene_data["hgnc_id"]
+        all_IDs.append(hgnc_id)
+
+    all_IDs = ' '.join(all_IDs).replace('HGNC:','').split()
+
+    # check if list is empty
+    if len(all_IDs) == 0:
+        print("No gene IDs found for this ID")
+        exit()
+    return all_IDs
 
 def check_testID(testID, file_directory, version):
     """Test the given R code to ensure it is in the correct format
@@ -362,7 +398,7 @@ def check_ngtd(file_directory, link):
 
     return ngtd_status, version
 
-def call_transcript_make_bed(HGNC_list, flank, genome_build,
+def call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts):
     """A function that uses the HGNC ID from the panelapp json
     to gather gene info from variant validator's gene to transcript tool
@@ -385,20 +421,30 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
     transcript_filter = "/" + limited_transcripts + "/" + transcript_set + "/" + genome_build # TODO to long for PEP8 standards
 
     # make empty bed file
-    print("Making bed file for gene list:" + str(HGNC_list))
+    print("Making bed file for gene list:" + str(hgnc_list))
     concat_filename = "panel_output.bed"
     with open(concat_filename, 'w') as f:
         f.write("chrom\tchromStart\tchromEnd\tname\tscore\tstrand\n")
 
     # Check HGNC list
-    for HGNC in HGNC_list:
-        full_url = url_base + str(HGNC)+ transcript_filter
+    for hgnc in hgnc_list:
+        full_url = url_base + str(hgnc)+ transcript_filter
         print("querying: " + full_url)
         logging.info("Querying: %s", full_url)
         try:
-            r = requests.get(full_url, headers={ "content-type" : "application/json"}, timeout=120) # TODO to long for PEP8 standards. 
+
+            r = requests.get(full_url,
+                             headers={ "content-type" : "application/json"},
+                             timeout=120) # TODO to long for PEP8 standards.
             decoded = r.json()
-            print(repr(decoded))
+            # print(repr(decoded))
+
+            # check if variantvalidator is down
+            # a dict is returned, so no error produced by get request
+            if 'message' in decoded:
+                print(decoded['message'])
+                print("Variant Validator may be experiencing internal server errors")
+                exit()
             json_dict = decoded[0]
         except requests.exceptions.RequestException as e:
             print("An exception occurred connecting to variant validator")
@@ -407,7 +453,8 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
             raise SystemExit(e) from e
             # exit()
 
-        # if the gene symbol does not exist returns {'error': 'Unable to recognise gene symbol NO DATA', 'requested_symbol': 'NO DATA'}
+        # if the gene symbol does not exist returns
+        # {'error': 'Unable to recognise gene symbol NO DATA', 'requested_symbol': 'NO DATA'}
         # if json_dict["error"] exists print the error and exit
         if 'error' in json_dict:
             print("An error occured connecting to variant validator: "
@@ -415,12 +462,14 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
             print(json_dict['error'])
             exit()
 
-        # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
+        # Keys in json ['current_name', 'current_symbol', 'hgnc',
+            # 'previous_symbol', 'requested_symbol', 'transcripts']
         # print("JSON found")
         logging.info("Json successfully returned")
         transcripts_list = json_dict["transcripts"]
 
-        # case where entry (using genome_build = "GRCh38", transcript_set = "ensembl", limited_transcripts = "select")
+        # case where entry (using genome_build = "GRCh38",
+        # transcript_set = "ensembl", limited_transcripts = "select")
         # produced empty "transcripts" dict in json. Set up code to return informative message
         # empty dicts == false in python
 
@@ -453,15 +502,15 @@ def call_transcript_make_bed(HGNC_list, flank, genome_build,
             "mane_select" : str(annotations_dict["mane_select"])
         }
         json_object = json.dumps(database_dict, indent=4)
-        json_name = str(HGNC) + "_VV_output.json"
+        json_name = str(hgnc) + "_VV_output.json"
         # Writing to sample.json
         with open(json_name, "w") as outfile:
             outfile.write(json_object)
         logging.info("json containing data for database entry created")
 
         # make bedfile header
-        print("Making bed file for HGNC:" + str(HGNC))
-        filename = str(HGNC) + "_output.bed"
+        print("Making bed file for HGNC:" + str(hgnc))
+        filename = str(hgnc) + "_output.bed"
         with open(filename, 'w') as f:
             f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
 

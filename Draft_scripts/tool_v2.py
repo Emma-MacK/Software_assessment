@@ -4,7 +4,10 @@ import json
 import logging
 import logging.config
 import time
-from functions import get_target_panelapp, check_testID, check_ngtd
+
+import pandas as pd
+import requests
+from functions import get_target_ngtd, get_target_panelapp, check_testID, check_ngtd, get_hgncIDs, call_transcript_make_bed
 
 # setting the logging.Formatter to use GMT time as default.
 # Guarantees that the log file always reflects UK local time
@@ -26,10 +29,18 @@ args = argParser.parse_args()
 testID = args.testID
 logging.info("Request received for %s panel", testID)
 
+
+# TODO: change to commandline arguments
+flank = 25
+genome_build = "GRCh37"
+transcript_set = "refseq"
+limited_transcripts = "mane_select"
+
 # specifying location of NGTD file and saving all files to variable files.
 # NGTD file available in repo is from version 5.1. of the genomic test
 NGTD_DIRECTORY = 'test_directory_file'
 # TODO: Consider changing file location to a mounted volume when implementing docker.
+
 
 # specifyng generic NGTD download link which can be modified by adding X.X.xlsx where X stands for a number
 NGTD_LINK = "https://www.england.nhs.uk/wp-content/uploads/2018/08/Rare-and-inherited-disease-national-genomic-test-directory-version-"
@@ -43,9 +54,14 @@ logging.info(confirmed_testid)
 
 # pulling panel information from PanelApp Api
 genes_panelapp = get_target_panelapp(testID)
-
 # Loading json into a dictionary and logging panel name
 genes_panelapp_dict = json.loads(genes_panelapp)
 panel_name = genes_panelapp_dict.get("name")
 print(f"Panel information pulled for {testID}:{panel_name}")
 logging.info("Successfully pulled data for %s:%s", testID, panel_name)
+
+# retrieve HGNC IDs for bed files from json
+hgnc_list = get_hgncIDs(genes_panelapp)
+call_transcript_make_bed(hgnc_list, flank, genome_build,
+                             transcript_set, limited_transcripts)
+
