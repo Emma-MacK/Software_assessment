@@ -56,11 +56,14 @@ This code can be run from the Software_assessment/frontend folder.
 
 You can run by going into the frontend folder and typing:
 
-'''python
+```python
 python manage.py runserver 8000
-'''
+```
 
 This will run the django frontend locally at http://127.0.0.1:8000/
+
+Here you can place the panel ID and search for the NGTD targeted genes entry or the PanelApp HGNC values.
+To close the server you can type ctrl + C on the command line.
 
 ## Plans for future development ##
 
