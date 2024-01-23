@@ -2,4 +2,6 @@ argparse
 pandas==2.1.0
 requests
 openpyxl
+pytest==7.4.2 
 django
+
