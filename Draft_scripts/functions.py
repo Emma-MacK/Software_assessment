@@ -6,7 +6,6 @@ from math import floor
 from datetime import datetime
 import json
 import requests
-import json
 import logging
 import logging.config
 import time
@@ -60,12 +59,6 @@ def get_target_ngtd(testID, file_directory, version):
 
     # print columns
     result_ngtd = panel['Target/Genes'].to_string(index=False)
-
-    # if the target is genome wide, unable to process to bed files due to syntax error
-    if "Genomewide" in result_ngtd:
-        print(result_ngtd)
-        print("This R code corresponds to genome wide testing, no bed files will be produced")
-        exit()
     return result_ngtd
 
 def get_target_panelapp(testID):
@@ -84,12 +77,11 @@ def get_target_panelapp(testID):
     """
 
     server = "https://panelapp.genomicsengland.co.uk/api/v1"
-    # insert R code, panel app does not seem to work with R at start, so stripping R from string
+    # insert R code
     ext = "/panels/" + testID
 
     # use try and except to handle errors connecting to panelapp
     try:
-
         logging.info("Attempting to pull data from PanelApp Api")
         r = requests.get(server+ext, headers={"Content-Type" : "application/json"}, timeout=120) # TODO Sentence to long for PEP8
         decoded = r.json()
@@ -97,7 +89,7 @@ def get_target_panelapp(testID):
         return result_panelapp
 
     except requests.exceptions.RequestException as e:
-            # get details of exception
+        # get details of exception
         print("An exception occurred connecting to PanelApp")
         logging.error("Unable to connect to Panel App. System Exit raised") # TODO Sentence to long for PEP8
         raise SystemExit(e) from e
@@ -142,7 +134,6 @@ def get_hgncIDs(result_panelapp):
     return all_IDs
 
 def check_testID(testID, file_directory, version):
-
     """Test the given R code to ensure it is in the correct format
       and check it exists in the test directory
 
