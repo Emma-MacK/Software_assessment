@@ -134,6 +134,11 @@ def get_hgncIDs(result_panelapp):
         all_IDs.append(hgnc_id)
 
     all_IDs = ' '.join(all_IDs).replace('HGNC:','').split()
+
+    # check if list is empty
+    if len(all_IDs) == 0:
+        print("No gene IDs found for this ID")
+        exit()
     return all_IDs
 
 def check_testID(testID, file_directory, version):
@@ -437,9 +442,18 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         logging.info("Querying: %s", full_url)
         try:
 
-            r = requests.get(full_url, headers={ "content-type" : "application/json"}, timeout=120) # TODO to long for PEP8 standards. 
+            r = requests.get(full_url,
+                             headers={ "content-type" : "application/json"},
+                             timeout=120) # TODO to long for PEP8 standards.
             decoded = r.json()
-            print(repr(decoded))
+            # print(repr(decoded))
+
+            # check if variantvalidator is down
+            # a dict is returned, so no error produced by get request
+            if 'message' in decoded:
+                print(decoded['message'])
+                print("Variant Validator may be experiencing internal server errors")
+                exit()
             json_dict = decoded[0]
         except requests.exceptions.RequestException as e:
             print("An exception occurred connecting to variant validator")
@@ -448,7 +462,8 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
             raise SystemExit(e) from e
             # exit()
 
-        # if the gene symbol does not exist returns {'error': 'Unable to recognise gene symbol NO DATA', 'requested_symbol': 'NO DATA'}
+        # if the gene symbol does not exist returns
+        # {'error': 'Unable to recognise gene symbol NO DATA', 'requested_symbol': 'NO DATA'}
         # if json_dict["error"] exists print the error and exit
         if 'error' in json_dict:
             print("An error occured connecting to variant validator: "
@@ -456,12 +471,14 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
             print(json_dict['error'])
             exit()
 
-        # Keys in json ['current_name', 'current_symbol', 'hgnc', 'previous_symbol', 'requested_symbol', 'transcripts']
+        # Keys in json ['current_name', 'current_symbol', 'hgnc',
+            # 'previous_symbol', 'requested_symbol', 'transcripts']
         # print("JSON found")
         logging.info("Json successfully returned")
         transcripts_list = json_dict["transcripts"]
 
-        # case where entry (using genome_build = "GRCh38", transcript_set = "ensembl", limited_transcripts = "select")
+        # case where entry (using genome_build = "GRCh38",
+        # transcript_set = "ensembl", limited_transcripts = "select")
         # produced empty "transcripts" dict in json. Set up code to return informative message
         # empty dicts == false in python
 
