@@ -115,16 +115,17 @@ def get_hgncIDs(result_panelapp):
         all_IDs (list): A list of HGNC ids for the genes in a panel
     """
     # The format is incorrect, need to switch from single quote to double quote
-    test = result_panelapp.replace("'","\"")
-    panel_json = eval(test)
+    panel_json = json.loads(result_panelapp)
+    print(panel_json)
+    # panel_json = eval(test)
 
     # some cases return "{'detail': 'Not found.'}" indicating not in panel app
     # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
-    if panel_json["detail"] == "Not found.":
-        print("This R code does not have an associated panel")
-        print("This R code may not call for an NGS test")
-        exit()
-
+    if 'detail' in panel_json:
+        if panel_json['detail'] == "Not found.":
+            print("This R code does not have an associated panel")
+            print("This R code may not call for an NGS test")
+            exit()
 
     gene_info = panel_json["genes"]
     all_IDs = []
