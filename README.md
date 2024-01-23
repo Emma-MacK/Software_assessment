@@ -52,9 +52,15 @@ Issue branches - branches linked to an issue or requested change. Once happy wil
 
 
 # How to run #
+This code can be run from the Software_assessment/frontend folder.
 
 You can run by going into the frontend folder and typing:
-python manage.py runserver
+
+'''python
+python manage.py runserver 8000
+'''
+
+This will run the django frontend locally at http://127.0.0.1:8000/
 
 ## Plans for future development ##
 
