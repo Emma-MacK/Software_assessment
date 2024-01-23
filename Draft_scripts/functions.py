@@ -114,10 +114,7 @@ def get_hgncIDs(result_panelapp):
     Returns:
         all_IDs (list): A list of HGNC ids for the genes in a panel
     """
-    # The format is incorrect, need to switch from single quote to double quote
     panel_json = json.loads(result_panelapp)
-    print(panel_json)
-    # panel_json = eval(test)
 
     # some cases return "{'detail': 'Not found.'}" indicating not in panel app
     # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
