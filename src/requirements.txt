@@ -2,3 +2,4 @@ argparse
 pandas==2.1.0
 requests
 openpyxl
+sqlalchemy==1.4.49
