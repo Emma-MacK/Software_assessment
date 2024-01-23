@@ -50,6 +50,21 @@ Issue branches - branches linked to an issue or requested change. Once happy wil
 - bulletpoint broken down steps to meet requirement
 - add issue to KanBan board
 
+
+# How to run #
+This code can be run from the Software_assessment/frontend folder.
+
+You can run by going into the frontend folder and typing:
+
+```python
+python manage.py runserver 8000
+```
+
+This will run the django frontend locally at http://127.0.0.1:8000/
+
+Here you can place the panel ID and search for the NGTD targeted genes entry or the PanelApp HGNC values.
+To close the server you can type ctrl + C on the command line.
+
 ## Plans for future development ##
 
 Any current plans for future development are recorded in git issues.The desired end product is a tool to manage gene panels for NHS National genomic test directory tests in the laboratory and use this to record the testing carried out for individual patients. 
