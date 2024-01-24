@@ -1,10 +1,9 @@
 # unit tests for function call_transcript_make_bed
 import unittest
 from unittest.mock import patch, mock_open, call
+from src.functions import call_transcript_make_bed
 
-from functions import call_transcript_make_bed
-
-
+print("The following tests require VariantValidator to connect")
 # given correct input, expected to make a bed file and a json file
 def test_expected_files():
     # given the input HGNC 4562, expect files 4562_output.bed and 4562_VV_output.json
@@ -17,7 +16,7 @@ def test_expected_files():
     # set parameter so a mock command is run
     mock_open_files = mock_open()
     # anytiome open is called in functions, open mock files
-    with patch("functions.open", mock_open_files, create=True):
+    with patch("src.functions.open", mock_open_files, create=True):
         call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
     # check that while running call_transcript_make_bed, the files were interacted with
     mock_open_files.assert_any_call("4562_output.bed", "w")
@@ -27,11 +26,11 @@ def test_expected_files():
 def test_file_content():
     # given the input HGNC 4562, expect files 4562_output.bed and 4562_VV_output.json
     # if file names are changed, change tests
-    with open('test_expected_4562_output.bed', 'r') as file:
+    with open('tests/test_expected_4562_output.bed', 'r') as file:
         # mock calls for header and content are seperate, remove header by spliting on strand
         expected_bed_data = str(file.read()).split("strand\n")[1]
 
-    with open('test_expected_4562_output.json', 'r') as file:
+    with open('tests/test_expected_4562_output.json', 'r') as file:
         expected_json = str(file.read())
 
     # each mock call will be for a seperate line
@@ -52,7 +51,7 @@ def test_file_content():
     mock_open_files = mock_open()
 
     # anytiome open is called in functions, open mock files
-    with patch("functions.open", mock_open_files, create=True):
+    with patch("src.functions.open", mock_open_files, create=True):
         call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
 
     observed_calls = mock_open_files().write.call_args_list
