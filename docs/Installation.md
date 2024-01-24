@@ -18,10 +18,9 @@ N.B. We ask that third party users create their own copy of the github repositor
 The environment for running the tool can be set up with the following commands
 
 ```
-conda env create -n example_environment -f environment.yaml
+conda env create -n example_environment -f environment.yml
 conda activate example_environment
 pip install -r requirements.txt
-
 ```
 To exit the environment you can use
 
