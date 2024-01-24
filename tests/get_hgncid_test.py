@@ -10,7 +10,7 @@ from src.functions import get_hgncIDs
 expected_ids = ['1100', '1101', '16627', '26144', '9820', '9823']
 
 # given expected input, do we get expected output
-def test_expected_ids():
+def test_gethgnc_expected_ids():
     with open('tests/test_panelapp_call.json', 'r') as file:
         expected_json = str(file.read())
     assert get_hgncIDs(expected_json) == expected_ids
