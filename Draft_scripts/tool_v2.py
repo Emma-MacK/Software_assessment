@@ -7,7 +7,7 @@ import time
 
 import pandas as pd
 import requests
-from functions import get_target_ngtd, get_target_panelapp, check_testID, check_ngtd, parse_panel_app_json, call_transcript_make_bed
+from functions import get_target_ngtd, get_target_panelapp, check_testID, check_ngtd, parse_panel_app_json, call_transcript_make_bed, make_panel_json
 
 # setting the logging.Formatter to use GMT time as default.
 # Guarantees that the log file always reflects UK local time
@@ -61,10 +61,25 @@ print(f"Panel information pulled for {testID}: {panel_name}")
 logging.info("Successfully pulled data for %s:%s", testID, panel_name)
 
 # retrieve HGNC IDs for bed files from json
-hgnc_list, omim_numbers, panel_version = parse_panel_app_json(genes_panelapp)
-logging.info("The panel corresponds to version %s", panel_version)
+hgnc_list, id_omim_dictionary, panelid_version = parse_panel_app_json(genes_panelapp, testID)
+logging.info("The panel corresponds to version %s", panelid_version)
 logging.debug("The following hgncs have been parsed: %s", hgnc_list)
-logging.debug("The following omim numbers have been parsed: %s", omim_numbers)
-call_transcript_make_bed(hgnc_list, flank, genome_build,
+logging.debug("The following omim numbers have been parsed: %s", id_omim_dictionary)
+print(id_omim_dictionary)
+
+# Pulling transcript information and making bedfiles
+transcript_data = call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts)
 
+
+# TODO: When integrating database push replace by push to database question. 
+create_json = input("Do you want to create a json file [y/n]: ")
+while create_json == "":
+    if create_json.lower() == "y":
+        for hgnc in hgnc_list:
+            make_panel_json(hgnc, id_omim_dictionary, panelid_version, transcript_data)
+    elif create_json.lower() == "n":
+        print("JSON not created")
+        exit
+    else:
+        create_json = input("Please indicated yes or no [y/n]: ")
