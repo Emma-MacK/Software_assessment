@@ -15,17 +15,28 @@ for example:
 
 N.B. We ask that third party users create their own copy of the github repository before cloning it locally!
 
+The environment for running the tool can be set up with the following commands
 
-conda create with yaml
-install requirements.txt
+```
+conda env create -n example_environment -f environment.yaml
+conda activate example_environment
+pip install -r requirements.txt
+
+```
+To exit the environment you can use
+
+`conda deactivate`
+
 
 ## Docker
+
 Alternatively to creating a conda environment, docker could be used for running commands.
 Documentation on running docker can be found at:
 
 [Running Docker](Running_Docker.md)
 
 ## Commandline
+
 If you are planning to interact with Panel Manager through the commandline only this will give you the most functionality.
 running the core tool will
 
