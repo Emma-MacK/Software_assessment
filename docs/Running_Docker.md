@@ -1,7 +1,7 @@
 ### Running Docker ###
 
 This document described how to build and run the docker.
-This was built and tested in a branch from develop at commit 544b5f5
+This docker was designed to work with the command line tool, not the django app
 
 The docker allows a container to be build. This container has all the requirement to run the tool.
 
