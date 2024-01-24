@@ -1,14 +1,19 @@
 ## How to start
 
-This code can be run from the Software_assessment/frontend folder. 
 
-You can run by going into the frontend folder and typing:
+The frontend is a webpage run from a local server that will allow the user to interact with the tool with minimal use of the commandline
 
-```python
-python manage.py runserver 8000
+The server can be started from the root folder with the following command.
+
+```
+python frontend/manage.py runserver 8000
 ```
 
 This will run the django frontend locally at http://127.0.0.1:8000/
+
+Clicking the link will take the user to a webpage
+
+
 
 To close the server you can type ctrl + C on the command line.
 ## What are the inputs and outputs

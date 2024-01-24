@@ -1,6 +1,16 @@
-## Running make bed tests ##
+## Running tests ##
 
-from the Draft scripts folder
+This document is used to help with running the tests for this tool
+
+Currently tests included are:
+
+- testing bed file making
+
+**Tests for bedfile making currently requires the Variant Validator API to be functioning. If Variant Validator is down, these tests will fail**
+
+Tests can be run from the root directory using:
+
 `pytest`
 
-runs tests
+This runs all the tests that can be found.
+
