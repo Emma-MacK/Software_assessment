@@ -57,8 +57,10 @@ genes_panelapp = get_target_panelapp(testID)
 # Loading json into a dictionary and logging panel name
 genes_panelapp_dict = json.loads(genes_panelapp)
 panel_name = genes_panelapp_dict.get("name")
-print(f"Panel information pulled for {testID}:{panel_name}")
-logging.info("Successfully pulled data for %s:%s", testID, panel_name)
+
+if str(panel_name) != "None":
+    print(f"Panel information pulled for {testID}: {panel_name}")
+    logging.info("Successfully pulled data for %s:%s", testID, panel_name)
 
 # retrieve HGNC IDs for bed files from json
 hgnc_list = get_hgncIDs(genes_panelapp)
