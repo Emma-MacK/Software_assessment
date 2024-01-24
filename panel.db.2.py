@@ -158,7 +158,7 @@ column_types = {
 }
 
 # reading bedfile into a DataFrame
-bed_df = pd.read_csv("test_expected_4562.bed",
+bed_df = pd.read_csv("tests/test_expected_4562_output.bed",
                      sep="\t",
                      comment="#",
                      dtype=column_types
