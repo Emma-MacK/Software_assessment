@@ -34,7 +34,7 @@ class Panels(Base):
     __tablename__ = "panels"
 
     panel_table_id = Column("Panel Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column("Panel ID and Version Number", String)
+    panel_id_v = Column("Panel ID and Version", String, ForeignKey("genes.Panel ID and Version"))
     date = Column("Date", String)
     patient_id = Column("Patient ID", String)
     accession_no = Column("Accession Number", String)
@@ -70,9 +70,9 @@ class Genes(Base):
     __tablename__ = "genes"
 
     genes_table_id = Column("Genes Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column(String, ForeignKey("panels.Panel ID and Version Number"))
-    gene_name = Column("Gene Name", String)
-    hgnc_id = Column("HGNC ID", String)
+    panel_id_v = Column("Panel ID and Version", String, ForeignKey("panels.Panel ID and Version"))
+    gene_name = Column("Gene Name", String, ForeignKey("bedfile.Gene Name"))
+    hgnc_id = Column("HGNC ID", String, ForeignKey("bedfile.HGNC ID"))
     hgnc_symbol = Column("HGNC Symbol", String)
     omim_no = Column("OMIM", String)
     refseq_id = Column("Refseq ID", String)
