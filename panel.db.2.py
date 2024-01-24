@@ -1,7 +1,6 @@
-import pandas as pd
 import json
 
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, insert
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, FLOAT
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Mapped
@@ -16,7 +15,7 @@ class Panels(Base):
     __tablename__ = "panels"
 
     panel_table_id = Column("Panel Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column("Panel ID and Version Number", Integer)
+    panel_id_v = Column("Panel ID and Version Number", FLOAT)
     date = Column("Date", String)
     patient_id = Column("Patient ID", String)
     accession_no = Column("Accession Number", String)
@@ -34,7 +33,7 @@ class Genes(Base):
     __tablename__ = "genes"
 
     genes_table_id = Column("Genes Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column(Integer, ForeignKey("panels.Panel ID and Version Number"))
+    panel_id_v = Column(ForeignKey("panels.Panel ID and Version Number"))
     gene_name = Column("Gene Name", String)
     hgnc_id = Column("HGNC ID", String)
     hgnc_symbol = Column("HGNC Symbol", String)
@@ -64,7 +63,7 @@ session = Session()
 
 # load json file
 
-with open ('/home/stpuser/manchester/Software_assessment/test_output.json', 'r') as json_file:
+with open ("test_output.json", "r") as json_file:
     data = json.load(json_file)
 
 # add to Genes table
