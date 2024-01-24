@@ -96,42 +96,61 @@ def get_target_panelapp(testID):
         # exit()
 
 
-def get_hgncIDs(result_panelapp):
+def parse_panel_app_json(result_panelapp):
 
-    """Take the result of the panel app query and extract HGNC IDs
+    """Take the result of the panel app query and extract HGNC IDs,
+    OMIM number and panel version
 
     Args:
-        result_panelapp (str): A json file in string format, returned from querying panel app
+    - result_panelapp (str): A json file in string format, returned
+    - from querying panel app
 
     Returns:
-        all_IDs (list): A list of HGNC ids for the genes in a panel
+    - all_IDs (list): A list of HGNC ids for the genes in a panel
+    - omim (list): The OMIM number for each gene
+    - panel_version (float): The release version of the PanelApp
+        panel
+
     """
     panel_json = json.loads(result_panelapp)
 
     # some cases return "{'detail': 'Not found.'}" indicating not in panel app
     # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
-    if 'detail' in panel_json:
-        if panel_json['detail'] == "Not found.":
+    if "detail" in panel_json:
+        if panel_json["detail"] == "Not found.":
             print("This R code does not have an associated panel")
             print("This R code may not call for an NGS test")
             exit()
 
+    # parsing data on genes in the panel.
     gene_info = panel_json["genes"]
-    all_IDs = []
+
+    # creating empty lists for hgnc ID's and OMIM numbers
+    all_ids = []
+    all_omim_numbers = []
     # there are multiple genes in the list, loop over to get all HGNC ids
+    # and omim gene numbers
     for i in range(1,len(gene_info)):
         gene_info_item = gene_info[i]
-        gene_data = gene_info_item['gene_data']
+        gene_data = gene_info_item["gene_data"]
         hgnc_id = gene_data["hgnc_id"]
-        all_IDs.append(hgnc_id)
+        all_ids.append(hgnc_id)
+        omim_number = gene_data["omim_gene"] # returns a list
+        omim_number_string = omim_number[0] # converting to string
+        all_omim_numbers.append(omim_number_string)
 
-    all_IDs = ' '.join(all_IDs).replace('HGNC:','').split()
+    all_ids = " ".join(all_ids).replace("HGNC:","").split()
 
     # check if list is empty
-    if len(all_IDs) == 0:
+    if len(all_ids) == 0:
         print("No gene IDs found for this ID")
         exit()
-    return all_IDs
+
+
+    # Pulling panel version and saving as a float
+    panel_version = float(panel_json["version"])
+
+    return all_ids, all_omim_numbers, panel_version
 
 def check_testID(testID, file_directory, version):
     """Test the given R code to ensure it is in the correct format

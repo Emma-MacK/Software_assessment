@@ -7,7 +7,7 @@ import time
 
 import pandas as pd
 import requests
-from functions import get_target_ngtd, get_target_panelapp, check_testID, check_ngtd, get_hgncIDs, call_transcript_make_bed
+from functions import get_target_ngtd, get_target_panelapp, check_testID, check_ngtd, parse_panel_app_json, call_transcript_make_bed
 
 # setting the logging.Formatter to use GMT time as default.
 # Guarantees that the log file always reflects UK local time
@@ -57,11 +57,14 @@ genes_panelapp = get_target_panelapp(testID)
 # Loading json into a dictionary and logging panel name
 genes_panelapp_dict = json.loads(genes_panelapp)
 panel_name = genes_panelapp_dict.get("name")
-print(f"Panel information pulled for {testID}:{panel_name}")
+print(f"Panel information pulled for {testID}: {panel_name}")
 logging.info("Successfully pulled data for %s:%s", testID, panel_name)
 
 # retrieve HGNC IDs for bed files from json
-hgnc_list = get_hgncIDs(genes_panelapp)
+hgnc_list, omim_numbers, panel_version = parse_panel_app_json(genes_panelapp)
+logging.info("The panel corresponds to version %s", panel_version)
+logging.debug("The following hgncs have been parsed: %s", hgnc_list)
+logging.debug("The following omim numbers have been parsed: %s", omim_numbers)
 call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts)
 
