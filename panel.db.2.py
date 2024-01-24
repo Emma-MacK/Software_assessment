@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean, FLOAT
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Mapped
@@ -9,14 +9,32 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
-'''Creation of Panels table.'''
 
+# creating database structure
 class Panels(Base):
+    """
+    SQLAlchemy model representing panel data that was run for each
+    patient
+
+    Attributes:
+    - panel_table_id (int): Primary key identifier for the case entry
+    - panel_id_v (Str): The RCode_panelID_panelversion of the panel run
+    - date (Str): The date the case was analysed
+    - patient_id (Str): The unique patient ID assigned to in-house
+    - accession_no (Str): The unique ID associated with this test
+    request
+    - r_number (Str): The genomic test directory Rnumber assoicated with
+    this test request
+    - gene_list (Str): The List of Genes included in the panel
+
+    Note: There is foreign key relationship for panel_id_v between this
+    database and the genes database
+    """
 
     __tablename__ = "panels"
 
     panel_table_id = Column("Panel Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column("Panel ID and Version Number", FLOAT)
+    panel_id_v = Column("Panel ID and Version Number", String)
     date = Column("Date", String)
     patient_id = Column("Patient ID", String)
     accession_no = Column("Accession Number", String)
@@ -27,9 +45,27 @@ class Panels(Base):
 
         return f"({self.panel_id_v} {self.date} {self.patient_id} {self.accession_no} {self.r_number} {self.gene_list})"
 
-'''Creation of Genes table.'''
-
 class Genes(Base):
+    """
+    SQLAlchemy model representing panel data that was run for each
+    patient
+
+    Attributes:
+    - genes_table_id (int): Primary key identifier for the genes table
+    - panel_id_v (Str): The RCode_panelID_panelversion of the panel run
+    - date (Str): The date the case was analysed
+    - patient_id (Str): The unique patient ID assigned to in-house
+    - accession_no (Str): The unique ID associated with this test
+    request
+    - r_number (Str): The genomic test directory R number assoicated
+    with this test request
+    - gene_list (Str): The List of Genes included in the panel
+
+    Note: There is foreign key relationship for panel_id_v between
+    this database and the panels database.
+    There is also a further foreign key relationship for gene_name
+    and hgnc_id between this database and the bedfile database.
+    """
 
     __tablename__ = "genes"
 
@@ -66,8 +102,8 @@ class Bedfile(Base):
     - score (int): Score associated with the entry.
     - strand (str): Strand direction of the genomic region.
 
-    Note: gene_name and hgnc_id are foreign keys linked to the
-    genes database
+    Note: There is also a further foreign key relationship for gene_name
+    and hgnc_id between this database and the genes database.
     """
 
     __tablename__ = "bedfile"
