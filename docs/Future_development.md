@@ -4,3 +4,4 @@ This document dictates the changes and improvements we would aim to implement in
 
 - add testing that is not dependent on variant validator
 - update frontend to use tool_v2.py
+- Update docker to run django app
