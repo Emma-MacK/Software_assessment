@@ -20,7 +20,7 @@ The environment for running the tool can be set up with the following commands
 ```
 conda env create -n example_environment -f environment.yml
 conda activate example_environment
-pip install -r requirements.txt
+pip install -r src/requirements.txt
 ```
 To exit the environment you can use
 
