@@ -25,9 +25,10 @@ run:
     -v /var/local/panel_generator/bedfile_jsons/:/var/local/panel_generator/bedfile_jsons/ \
     -v /var/local/panel_generator/panel_jsons/:/var/local/panel_generator/panel_jsons/ \
     -v /var/local/panel_generator/genes_jsons/:/var/local/panel_generator/genes_jsons/ \
+	-v /var/local/panel_generator/database/:/var/local/panel_generator/database/ \
 	-it --rm \
 	--name $(CONTAINER_NAME) $(IMAGE_NAME):$(VERSION) \
-	python src/tools_v2.py -ID $(STRING_ARG)
+	python src/tool_v2.py -ID $(STRING_ARG)
 
 # Cleans away the docker image.
 clean_image:
