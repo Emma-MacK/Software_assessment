@@ -118,62 +118,62 @@ class Bedfile(Base):
     score = Column ("Score", Integer)
     strand = Column ("Strand Direction", String)
 
-# create an empty database
-engine = create_engine("sqlite:///panel_db.db", echo=True)
+# # create an empty database
+# engine = create_engine("sqlite:///panel_db.db", echo=True)
 
-# create an empty database with the structure outlined above
-Base.metadata.create_all(bind=engine)
+# # create an empty database with the structure outlined above
+# Base.metadata.create_all(bind=engine)
 
-# create session
-Session = sessionmaker(bind=engine)
-session = Session()
+# # create session
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
-# load json file
-with open ("test_output.json", "r") as json_file:
-    data = json.load(json_file)
+# # load json file
+# with open ("test_output.json", "r") as json_file:
+#     data = json.load(json_file)
 
-# add data from json into Genes table
-for item in data:
+# # add data from json into Genes table
+# for item in data:
 
-    new_record = Genes(**item)
-    session.add(new_record)
+#     new_record = Genes(**item)
+#     session.add(new_record)
 
-session.commit()
+# session.commit()
 
-# create an empty database with the structure outlined above
-Base.metadata.create_all(bind=engine)
+# # create an empty database with the structure outlined above
+# Base.metadata.create_all(bind=engine)
 
-# create session
-Session = sessionmaker(bind=engine)
-session = Session()
+# # create session
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
-# specifying data types for Pandas DataFrame
-column_types = {
-    "chromosome": str,
-    "start": int,
-    "end": int,
-    "name": str,
-    "score": int,
-    "strand": str
-}
+# # specifying data types for Pandas DataFrame
+# column_types = {
+#     "chromosome": str,
+#     "start": int,
+#     "end": int,
+#     "name": str,
+#     "score": int,
+#     "strand": str
+# }
 
-# reading bedfile into a DataFrame
-bed_df = pd.read_csv("tests/test_expected_4562_output.bed",
-                     sep="\t",
-                     comment="#",
-                     dtype=column_types
-                         )
+# # reading bedfile into a DataFrame
+# bed_df = pd.read_csv("tests/test_expected_4562_output.bed",
+#                      sep="\t",
+#                      comment="#",
+#                      dtype=column_types
+#                          )
 
-# Insert data into bedfile database
-for index, row in bed_df.iterrows():
-    feature = Bedfile(
-        chromosome=row["chromosome"],
-        start=row["start"],
-        end=row["end"],
-        name=row["name"],
-        score=row["score"],
-        strand=row["strand"])
-    session.add(feature)
+# # Insert data into bedfile database
+# for index, row in bed_df.iterrows():
+#     feature = Bedfile(
+#         chromosome=row["chromosome"],
+#         start=row["start"],
+#         end=row["end"],
+#         name=row["name"],
+#         score=row["score"],
+#         strand=row["strand"])
+#     session.add(feature)
 
-# commit
-session.commit()
+# # commit
+# session.commit()
