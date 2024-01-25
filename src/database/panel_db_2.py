@@ -47,35 +47,39 @@ class Panels(Base):
 
 class Genes(Base):
     """
-    SQLAlchemy model representing panel data that was run for each
+    SQLAlchemy model representing gene data that was run for each
     patient
 
     Attributes:
     - genes_table_id (int): Primary key identifier for the genes table
     - panel_id_v (Str): The RCode_panelID_panelversion of the panel run
-    - date (Str): The date the case was analysed
-    - patient_id (Str): The unique patient ID assigned to in-house
-    - accession_no (Str): The unique ID associated with this test
-    request
-    - r_number (Str): The genomic test directory R number assoicated
-    with this test request
-    - gene_list (Str): The List of Genes included in the panel
+    - gene_name (Str): Gene Name
+    - hgnc_id (Str): HUGO Gene Nomenclature Committee ID for the gene
+    - hgnc_symbol(Str): HGNC approved Gene Symbol
+    - omim_no (Str):
+    - refseq_id (Str): Transcript ID
+    - ensembl_select (bool): True/False wether transcript is ensembl
+    select
+    - mane_select (bool): True/False wether transcript is mane
+    select
+    - mane_plus_clinical (bool): True/False wether transcript is
+    mane plus clinical
 
     Note: There is foreign key relationship for panel_id_v between
     this database and the panels database.
-    There is also a further foreign key relationship for gene_name
-    and hgnc_id between this database and the bedfile database.
+    There is also a further foreign key relationship for hgnc_id
+    and refseq id between this database and the bedfile database.
     """
 
     __tablename__ = "genes"
 
     genes_table_id = Column("Genes Table ID", Integer, primary_key=True, autoincrement=True)
     panel_id_v = Column("Panel ID and Version", String, ForeignKey("panels.Panel ID and Version"))
-    gene_name = Column("Gene Name", String, ForeignKey("bedfile.Gene Name"))
+    gene_name = Column("Gene Name", String)
     hgnc_id = Column("HGNC ID", String, ForeignKey("bedfile.HGNC ID"))
     hgnc_symbol = Column("HGNC Symbol", String)
     omim_no = Column("OMIM", String)
-    refseq_id = Column("Refseq ID", String)
+    refseq_id = Column("Refseq ID", String, ForeignKey("bedfile.Refseq ID"))
     ensembl_select = Column("Ensembl Select", Boolean)
     mane_select = Column("Mane Select", Boolean)
     mane_plus_clinical = Column("Mane Plus Clinical", Boolean)
@@ -92,7 +96,6 @@ class Bedfile(Base):
 
     Attributes:
     - entry_id (int): Primary key identifier for the BED file entry.
-    - gene_name (str): Gene name associated with the entry.
     - hgnc_id (int): HGNC (HUGO Gene Nomenclature Committee) identifier.
     - chromosome (str): Chromosome on which the genomic region is
     located.
@@ -102,15 +105,15 @@ class Bedfile(Base):
     - score (int): Score associated with the entry.
     - strand (str): Strand direction of the genomic region.
 
-    Note: There is also a further foreign key relationship for gene_name
-    and hgnc_id between this database and the genes database.
+    Note: There is also a further foreign key relationship for hgnc_id
+    and refseq between this database and the genes database.
     """
 
     __tablename__ = "bedfile"
 
     entry_id = Column("entry_id", Integer, primary_key=True, autoincrement=True)
-    gene_name = Column("Gene Name", String, ForeignKey("genes.Gene Name"))
     hgnc_id = Column("HGNC ID", String, ForeignKey("genes.HGNC ID"))
+    refseq_id = Column("Refseq ID", String, ForeignKey("genes.Refseq ID"))
     chromosome = Column("Chromosome", String)
     start = Column("Start", Integer)
     end = Column("End", Integer)
