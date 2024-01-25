@@ -438,7 +438,10 @@ def make_panel_json(hgnc, id_omim_dictionary, panel_version, database_dict):
     database_dict["omim_no"] = omim_value
     database_dict["panel_id_v"] = panel_version
 
-    json_object = json.dumps(database_dict, indent=4)
+    # wrapping the database into a list
+    database_list = [database_dict]
+
+    json_object = json.dumps(database_list, indent=4)
     json_name = f"{hgnc}_VV_output.json"
     # Writing to sample.json
     with open(json_name, "w") as outfile:
