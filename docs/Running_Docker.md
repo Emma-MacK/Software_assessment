@@ -54,4 +54,24 @@ FGFR3 c.1138
 {'detail': 'Not found.'}
 ```
 
+
 When docker is used, the required dependencies are found where they previously not available.
+
+**Using Docker to run the frontend**
+
+First build the docker
+
+```
+docker build -t test_docker .
+```
+
+
+Then run the following command :
+
+```
+docker run -p 8000:8000 -v $(pwd):/code test_docker python frontend/manage.py runserver 0.0.0.0:8000
+```
+
+Finally access the frontend through the url:
+
+http://127.0.0.1:8000/
