@@ -57,7 +57,7 @@ FGFR3 c.1138
 
 When docker is used, the required dependencies are found where they previously not available.
 
-**Using Docker to run the frontend**
+**Using Docker to run the frontend while in root**
 
 First build the docker
 
