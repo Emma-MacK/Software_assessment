@@ -16,6 +16,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # specifying path to json files
+# TODO: Update file path as necessary
 json_files_path = "tests/gene_info_jsons"
 
 #getting list of json files

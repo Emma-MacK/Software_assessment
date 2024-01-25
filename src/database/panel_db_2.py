@@ -1,3 +1,22 @@
+"""
+genomic_database.py
+
+This module defines SQLAlchemy models representing genomic data
+for panels/case runs, genes per panel, and bedfile data.
+It also creates an SQLite database with the specified structure.
+
+Module Classes:
+- Panels: Represents panel data for each patient
+- Genes: Represents gene data for each available panel
+- Bedfile: Represents data needed to create a genomic BED file
+
+Database Structure:
+- Foreign key relationships between Panels and Genes based on
+'panel_id_v'.
+- Further foreign key relationships between Genes and Bedfile
+based on 'hgnc_id' and 'refseq_id'.
+"""
+
 import json
 import pandas as pd
 
@@ -8,7 +27,6 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
-
 
 # creating database structure
 class Panels(Base):
@@ -43,12 +61,12 @@ class Panels(Base):
 
     def __repr__(self):
 
-        return f"({self.panel_id_v} {self.date} {self.patient_id} {self.accession_no} {self.r_number} {self.gene_list})"
+        return f"({self.panel_id_v} {self.date} {self.patient_id} {self.accession_no}\
+             {self.r_number} {self.gene_list})"
 
 class Genes(Base):
     """
-    SQLAlchemy model representing gene data that was run for each
-    patient
+    SQLAlchemy model representing gene data for each available panel
 
     Attributes:
     - genes_table_id (int): Primary key identifier for the genes table
@@ -86,8 +104,9 @@ class Genes(Base):
 
     def __repr__(self):
 
-        return f"({self.genes_table_id} {self.panel_id_v} {self.gene_name} {self.hgnc_id} {self.hgnc_symbol} {self.omim_no} \
-            {self.refseq_id} {self.ensembl_select} {self.mane_select} {self.mane_plus_clinical})"
+        return f"({self.genes_table_id} {self.panel_id_v} {self.gene_name} \
+            {self.hgnc_id} {self.hgnc_symbol} {self.omim_no} {self.refseq_id} \
+            {self.ensembl_select} {self.mane_select} {self.mane_plus_clinical})"
 
 class Bedfile(Base):
     """
@@ -121,62 +140,8 @@ class Bedfile(Base):
     score = Column ("Score", Integer)
     strand = Column ("Strand Direction", String)
 
-# # create an empty database
-# engine = create_engine("sqlite:///panel_db.db", echo=True)
+# create an empty database
+engine = create_engine("sqlite:///panel_db.db", echo=True)
 
-# # create an empty database with the structure outlined above
-# Base.metadata.create_all(bind=engine)
-
-# # create session
-# Session = sessionmaker(bind=engine)
-# session = Session()
-
-# # load json file
-# with open ("test_output.json", "r") as json_file:
-#     data = json.load(json_file)
-
-# # add data from json into Genes table
-# for item in data:
-
-#     new_record = Genes(**item)
-#     session.add(new_record)
-
-# session.commit()
-
-# # create an empty database with the structure outlined above
-# Base.metadata.create_all(bind=engine)
-
-# # create session
-# Session = sessionmaker(bind=engine)
-# session = Session()
-
-# # specifying data types for Pandas DataFrame
-# column_types = {
-#     "chromosome": str,
-#     "start": int,
-#     "end": int,
-#     "name": str,
-#     "score": int,
-#     "strand": str
-# }
-
-# # reading bedfile into a DataFrame
-# bed_df = pd.read_csv("tests/test_expected_4562_output.bed",
-#                      sep="\t",
-#                      comment="#",
-#                      dtype=column_types
-#                          )
-
-# # Insert data into bedfile database
-# for index, row in bed_df.iterrows():
-#     feature = Bedfile(
-#         chromosome=row["chromosome"],
-#         start=row["start"],
-#         end=row["end"],
-#         name=row["name"],
-#         score=row["score"],
-#         strand=row["strand"])
-#     session.add(feature)
-
-# # commit
-# session.commit()
+# create an empty database with the structure outlined above
+Base.metadata.create_all(bind=engine)
