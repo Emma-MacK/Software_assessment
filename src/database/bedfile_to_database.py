@@ -5,6 +5,15 @@ This module allows bedfile data to be pushed to the database
 from existing bedfiles assuming they follow the naming
 convention defined below.
 
+Bedfile is expected to contain the following headers
+
+- "chromosome": str
+- "start": int
+- "end": int
+- "name": str
+- "score": int
+- "strand": str
+
 TODO: Module assumes the database is located in the directory
 from which you are executing this module.
 """
