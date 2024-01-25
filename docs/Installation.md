@@ -15,6 +15,8 @@ for example:
 
 N.B. We ask that third party users create their own copy of the github repository before cloning it locally!
 
+If you plan on using docker to run the tool, skip to the [docker](#docker) section rather than following the environment set up
+
 The environment for running the tool can be set up with the following commands
 
 ```
