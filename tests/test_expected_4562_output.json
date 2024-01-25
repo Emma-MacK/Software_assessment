@@ -1,0 +1,9 @@
+{
+    "gene_name": "GRB2 related adaptor protein",
+    "hgnc_ID": "HGNC:4562",
+    "hgnc_symbol": "GRAP",
+    "refseq_id": "NM_006613.4",
+    "ensembl_select": "False",
+    "mane_plus_clinical": "False",
+    "mane_select": "True"
+}

@@ -1,6 +1,6 @@
 # script for me to get bed file
 
-from functions import call_transcript_make_bed
+from ToolModule.functions import call_transcript_make_bed
 
 # ie "HGNC:4562"
 # want the HGNC number
