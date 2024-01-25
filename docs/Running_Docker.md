@@ -55,7 +55,7 @@ FGFR3 c.1138
 
 When docker is used, the required dependencies are found where they previously not available.
 
-**Using Docker to run the frontend while in root**
+## Using Docker to run the frontend while in root ##
 
 First build the docker
 
@@ -73,3 +73,18 @@ docker run -p 8000:8000 -v $(pwd):/code test_docker python frontend/manage.py ru
 Finally access the frontend through the url:
 
 http://127.0.0.1:8000/
+
+## Retrieving files from docker ##
+
+Files made using docker are held on the docker image and are not immediately accessible
+To retrieve files from the docker use the following command:
+
+```
+docker cp test_docker:[path to file in docker] [path to desired location]
+```
+
+example
+
+```
+docker cp test_docker:./panel_output.bed .
+```
