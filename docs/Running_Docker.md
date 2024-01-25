@@ -21,7 +21,7 @@ docker run -dit --name test_docker test_docker:latest
 This creates an active container that can be used to run commands.
 
 ```
-docker run test_docker python Draft_scripts/tool_v2.py -ID R24
+docker run test_docker python src/tool_v2.py -ID R24
 ```
 
 #### Example ####
@@ -31,10 +31,10 @@ The following examples were run in a conda environment that did not have the too
 **Before Docker**
 
 ```
-python Draft_scripts/tool_v2.py
+python src/tool_v2.py
 
 Traceback (most recent call last):
-  File "/home/emma/Documents/Uni_work/software/Software_assessment/Draft_scripts/tool_v2.py", line 7, in <module>
+  File "/home/emma/Documents/Uni_work/software/Software_assessment/srctool_v2.py", line 7, in <module>
     import pandas as pd
   File "/home/emma/.local/lib/python3.10/site-packages/pandas/__init__.py", line 16, in <module>
     raise ImportError(
@@ -47,7 +47,7 @@ dateutil: No module named 'dateutil'
 **Using Docker**
 
 ```
-docker run test_docker python Draft_scripts/tool_v2.py -ID R24
+docker run test_docker python src/tool_v2.py -ID R24
 
 R code found in test directory:
 FGFR3 c.1138

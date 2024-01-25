@@ -30,9 +30,14 @@ To exit the environment you can use
 ## Docker
 
 Alternatively to creating a conda environment, docker could be used for running commands.
+
+This approach requires that docker has been installed. The official process for installing docker can be found
+[here](https://docs.docker.com/engine/install/ubuntu/)
+
 Documentation on running docker can be found at:
 
 [Running Docker](Running_Docker.md)
+
 
 ## Commandline
 
