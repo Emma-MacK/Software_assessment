@@ -80,4 +80,4 @@ Here is a visual example of the database schema
 
 Here is a visual example of the database in sqlviewer
 
-![Database]../(images/database.png)
+![Database](../images/database.png)
