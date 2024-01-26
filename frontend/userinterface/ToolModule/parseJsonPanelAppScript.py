@@ -47,9 +47,11 @@ def parse_json_panelapp(r, logfile):
                     gene_symbols.append(gene_symbol)
                     omim_genes.append(omim_gene)
                 # prepare lists to enter dataframe
-                zipped = list(zip(hgnc_IDs, gene_names, gene_symbols, omim_genes))
+                zipped = list(zip(hgnc_IDs, gene_names,
+                                  gene_symbols, omim_genes))
                 # populate dataframe with lists
-                df_columns = ['hgnc_IDs', 'gene_Name', 'gene_Symbol', 'OMIM_Gene']
+                df_columns = ['hgnc_IDs', 'gene_Name',
+                              'gene_Symbol', 'OMIM_Gene']
                 entries = pd.DataFrame(zipped, columns=df_columns)
                 # insert uniqueID column
                 entries.insert(0, 'uniqueID', unique_num)
@@ -59,7 +61,8 @@ def parse_json_panelapp(r, logfile):
                 return entries
             except KeyError:
                 print('KeyError:PanelApp output JSON doesn\' contain \
-                \'gene_name\' or \'hgnc_id\' or \'omim_gene\' or \'gene_symbol\' key')
+                \'gene_name\' or \'hgnc_id\' or \'omim_gene\' or \
+                \'gene_symbol\' key')
             else:
                 print("")
         else:

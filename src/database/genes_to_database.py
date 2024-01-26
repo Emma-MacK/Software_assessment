@@ -43,7 +43,7 @@ session = Session()
 # TODO: Update file path as necessary
 json_files_path = "tests/gene_info_jsons"
 
-#getting list of json files
+# getting list of json files
 files = os.listdir(json_files_path)
 file_name_pattern = '*.json'
 matching_files = fnmatch.filter(files, file_name_pattern)

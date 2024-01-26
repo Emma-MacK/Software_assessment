@@ -13,4 +13,5 @@ flank = 25
 genome_build = "GRCh38"
 transcript_set = "ensembl"
 limited_transcripts = "select"
-call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
+call_transcript_make_bed(HGNC, flank, genome_build,
+                         transcript_set, limited_transcripts)

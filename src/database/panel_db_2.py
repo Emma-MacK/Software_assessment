@@ -17,16 +17,13 @@ Database Structure:
 based on 'hgnc_id' and 'refseq_id'.
 """
 
-import json
-import pandas as pd
-
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Boolean
+from sqlalchemy import (create_engine, ForeignKey,
+                        Column, String, Integer, Boolean)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import relationship
+
 
 Base = declarative_base()
+
 
 # creating database structure
 class Panels(Base):
@@ -51,8 +48,10 @@ class Panels(Base):
 
     __tablename__ = "panels"
 
-    panel_table_id = Column("Panel Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column("Panel ID and Version", String, ForeignKey("genes.Panel ID and Version"))
+    panel_table_id = Column("Panel Table ID", Integer,
+                            primary_key=True, autoincrement=True)
+    panel_id_v = Column("Panel ID and Version",
+                        String, ForeignKey("genes.Panel ID and Version"))
     date = Column("Date", String)
     patient_id = Column("Patient ID", String)
     accession_no = Column("Accession Number", String)
@@ -61,8 +60,10 @@ class Panels(Base):
 
     def __repr__(self):
 
-        return f"({self.panel_id_v} {self.date} {self.patient_id} {self.accession_no}\
-             {self.r_number} {self.gene_list})"
+        return f"({self.panel_id_v} {self.date} \
+                  {self.patient_id} {self.accession_no} \
+                  {self.r_number} {self.gene_list})"
+
 
 class Genes(Base):
     """
@@ -91,8 +92,10 @@ class Genes(Base):
 
     __tablename__ = "genes"
 
-    genes_table_id = Column("Genes Table ID", Integer, primary_key=True, autoincrement=True)
-    panel_id_v = Column("Panel ID and Version", String, ForeignKey("panels.Panel ID and Version"))
+    genes_table_id = Column("Genes Table ID", Integer,
+                            primary_key=True, autoincrement=True)
+    panel_id_v = Column("Panel ID and Version", String,
+                        ForeignKey("panels.Panel ID and Version"))
     gene_name = Column("Gene Name", String)
     hgnc_id = Column("HGNC ID", String, ForeignKey("bedfile.HGNC ID"))
     hgnc_symbol = Column("HGNC Symbol", String)
@@ -106,7 +109,9 @@ class Genes(Base):
 
         return f"({self.genes_table_id} {self.panel_id_v} {self.gene_name} \
             {self.hgnc_id} {self.hgnc_symbol} {self.omim_no} {self.refseq_id} \
-            {self.ensembl_select} {self.mane_select} {self.mane_plus_clinical})"
+            {self.ensembl_select} {self.mane_select} \
+            {self.mane_plus_clinical})"
+
 
 class Bedfile(Base):
     """
@@ -130,15 +135,17 @@ class Bedfile(Base):
 
     __tablename__ = "bedfile"
 
-    entry_id = Column("entry_id", Integer, primary_key=True, autoincrement=True)
+    entry_id = Column("entry_id", Integer,
+                      primary_key=True, autoincrement=True)
     hgnc_id = Column("HGNC ID", String, ForeignKey("genes.HGNC ID"))
     refseq_id = Column("Refseq ID", String, ForeignKey("genes.Refseq ID"))
     chromosome = Column("Chromosome", String)
     start = Column("Start", Integer)
     end = Column("End", Integer)
-    name = Column ("Name", String)
-    score = Column ("Score", Integer)
-    strand = Column ("Strand Direction", String)
+    name = Column("Name", String)
+    score = Column("Score", Integer)
+    strand = Column("Strand Direction", String)
+
 
 # create an empty database
 engine = create_engine("sqlite:///panel_db.db", echo=True)
