@@ -510,7 +510,7 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
             "mane_select" : str(annotations_dict["mane_select"])
         }
         json_object = json.dumps(database_dict, indent=4)
-        json_name = str(hgnc) + "_VV_output.json"
+        json_name = "output/" + dt_string + "/" + str(hgnc) + "_VV_output.json"
         # Writing to sample.json
         with open(json_name, "w") as outfile:
             outfile.write(json_object)
@@ -518,7 +518,7 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
 
         # make bedfile header
         print("Making bed file for HGNC:" + str(hgnc))
-        filename = str(hgnc) + str(refseq_id) + "_output.bed"
+        filename = "output/" + dt_string + "/" + str(hgnc) + str(refseq_id) + "_output.bed"
         with open(filename, 'w') as f:
             f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
 
