@@ -4,7 +4,7 @@ This tool is designed to take an R code and return a list of genes and bed files
 
 ## APP usage ##
 
-Documentation on the installation and setup of the app can be found [here.](docs/Installation.md)
+Documentation on the installation and setup of the app can be found [here.](docs/INSTALLATION.md)
 
 Required Inputs:
 1) Test directory code: -ID followed by test code ("RXXX")
@@ -26,7 +26,7 @@ The information produced by the tool can be pushed to a database for later retri
 
 An earlier version of the tool is available in a webpage format as well. Details on running the interactive webpage can be found [here.](docs/FrontendDocs.md)
 
-The tool can also be run using Docker. Details on using the docker can be found [here.](docs/Running_Docker.md)
+The tool can also be run using Docker. Details on using the docker can be found [here.](docs/DOCKER.md)
 
 ## Folder structure ##
 
@@ -81,3 +81,7 @@ Any current plans for future development are recorded in git issues.The desired 
 ## Needing help ##
 
 Need help running the tool? Details of how to request help can be found [here.](docs/Seeking_help.md)
+
+## Contributing ##
+
+Alternatively if you would like to contribute to the project, details on how to do this can be found [here](docs/CONTRIBUTING.md)
