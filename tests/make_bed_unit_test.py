@@ -19,8 +19,8 @@ def test_expected_files():
     with patch("src.functions.open", mock_open_files, create=True):
         call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
     # check that while running call_transcript_make_bed, the files were interacted with
-    mock_open_files.assert_any_call("4562_output.bed", "w")
-    mock_open_files.assert_any_call("4562_VV_output.json", "w")
+    mock_open_files.assert_any_call("4562_NM_006613.4.", "w")
+    mock_open_files.assert_any_call("4562_NM_006613.4.", "w")
 
 # output files have expected content
 def test_file_content():
