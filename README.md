@@ -4,7 +4,6 @@ This tool is designed to take an R code and return a list of genes and bed files
 
 ## APP usage ##
 
-
 Documentation on the installation and setup of the app can be found [here.](docs/Installation.md)
 
 Required Inputs:
@@ -29,42 +28,47 @@ The tool can also be run using Docker. Details on using the docker can be found 
 
 ## Folder structure ##
 
+Overview of existing folder structure
+
 ```
-Overview of the file structure
 .
-├── bin
-│   └── README.md
+├── config
 ├── docs
-│   └── README.md
-├── Draft_scripts
-│   └── emma_get_bed.py
-├── environment.yml
-├── Issue11.py
-├── LICENCE
-├── Rare-and-inherited-disease-national-genomic-test-directory-version-5.1.xlsx
-├── README.md
+├── frontend
+│   ├── frontend
+│   │   └── __pycache__
+│   └── userinterface
+│       ├── config
+│       ├── migrations
+│       │   └── __pycache__
+│       ├── __pycache__
+│       ├── static
+│       │   └── userinterface
+│       ├── templates
+│       │   └── userinterface
+│       └── ToolModule
+│           └── __pycache__
+├── images
+├── output
+│   ├── 25012024_101359
+│   └── logs
 ├── src
-│   ├── README.md
-│   ├── requirements.txt
-│   ├── tool.py
-│   └── unusedclasses
-│       └── argument_parser.py
-├── test.py
+│   └── database
+├── test_directory_file
 └── tests
-    └── README.md
+    ├── bedfiles
+    ├── gene_info_jsons
+    ├── panel_info_jsons
+    └── __pycache__
 ```
 
-## Branches ##
+## Testing ##
 
-Main - the current minimally functional version of the product. The current release is v1
-Develop - branch of product in the development. Branches will be merged into here to ensure changes don't clash
-Issue branches - branches linked to an issue or requested change. Once happy will be merged into develop.
+Testing is still in development. Tests currently exist for the functions get_hgncIDs and call_transcript_make_bed. These can be run with `pytest` from the root directory
 
-## Issue Process for user requirement ##
+## Logging ##
 
-- new user requirement documented in issue
-- bulletpoint broken down steps to meet requirement
-- add issue to KanBan board
+## Pep8 ##
 
 
 ## Plans for future development ##
