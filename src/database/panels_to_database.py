@@ -1,9 +1,30 @@
+"""
+panels_to_database.py
+
+This module allows panel data from run cases to be pushed
+to the database from existing json file with the following
+structure
+
+[
+    {
+        "panel_id_v": "2.11",
+        "date": "250124",
+        "patient_id": "pt4484",
+        "accession_no": "AF45268",
+        "r_number": "R208"
+    }
+]
+
+TODO: Module assumes the database is located in the directory
+from which you are executing this module.
+"""
+
 import json
 import os
 import fnmatch
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from panel_db_2 import Base, Panels, Genes, Bedfile
+from panel_db_2 import Base, Panels
 
 # create an empty database
 engine = create_engine("sqlite:///panel_db.db", echo = True)

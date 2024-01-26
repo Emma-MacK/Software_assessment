@@ -1,0 +1,13 @@
+[
+    {
+        "gene_name": "acid phosphatase 2, lysosomal",
+        "hgnc_id": "HGNC:123",
+        "hgnc_symbol": "ACP2",
+        "refseq_id": "NM_001610.4",
+        "ensembl_select": false,
+        "mane_plus_clinical": false,
+        "mane_select": true,
+        "omim_no": "604373",
+        "panel_id_v": "R208_635_2.11"
+    }
+]

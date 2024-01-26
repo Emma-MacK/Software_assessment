@@ -496,6 +496,9 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         annotations_dict = transcripts_dict["annotations"]
         chromosome = "chr"+str(annotations_dict["chromosome"])
 
+        # get refseq id for bedfile name
+        refseq_id = transcripts_dict["reference"]
+
         # get the info for database and write into json
         database_dict = {
             "gene_name": json_dict["current_name"],
@@ -515,8 +518,8 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
 
         # make bedfile header
         print("Making bed file for HGNC:" + str(hgnc))
-        filename = str(hgnc) + "_output.bed"
-        with open("output/" + dt_string + "/" + filename, 'w') as f:
+        filename = str(hgnc) + str(refseq_id) + "_output.bed"
+        with open(filename, 'w') as f:
             f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
 
         # build bed file

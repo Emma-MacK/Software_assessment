@@ -1,9 +1,33 @@
+"""
+genes_to_database.py
+
+This module allows gene data from panels to be pushed
+to the database from existing json file with the following structure
+
+[
+    {
+        "panel_id_v": "2.11",
+        "gene_name": "acid phosphatase 2, lysosomal",
+        "hgnc_id": "HGNC:123",
+        "hgnc_symbol": "ACP2",
+        "omim_no": "607585",
+        "refseq_id": "NM_001610.4",
+        "ensembl_select": false,
+        "mane_plus_clinical": false,
+        "mane_select": true
+    }
+]
+
+TODO: Module assumes the database is located in the directory
+from which you are executing this module.
+"""
+
 import json
 import os
 import fnmatch
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from panel_db_2 import Base, Panels, Genes, Bedfile
+from panel_db_2 import Base, Genes
 
 # create an empty database
 engine = create_engine("sqlite:///panel_db.db", echo=True)
@@ -16,6 +40,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # specifying path to json files
+# TODO: Update file path as necessary
 json_files_path = "tests/gene_info_jsons"
 
 #getting list of json files
