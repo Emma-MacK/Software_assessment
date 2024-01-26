@@ -26,10 +26,15 @@ run:
     -v /var/local/panel_generator/panel_jsons/:/var/local/panel_generator/panel_jsons/ \
     -v /var/local/panel_generator/genes_jsons/:/var/local/panel_generator/genes_jsons/ \
 	-v /var/local/panel_generator/database/:/var/local/panel_generator/database/ \
-	-it --rm \
+	-it \
 	--name $(CONTAINER_NAME) $(IMAGE_NAME):$(VERSION) \
 	python src/tool_v2.py -ID $(STRING_ARG)
 
 # Cleans away the docker image.
-clean_image:
+clean:
+	docker rm $(CONTAINER_NAME) || true
+
+# Cleans away the docker image.
+hard_clean:
 	docker rmi $(IMAGE_NAME) || true
+	docker rm $(CONTAINER_NAME) || true
