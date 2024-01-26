@@ -76,8 +76,8 @@ Install sqliteviewer to respective IDE to view database.
 
 Here is a visual example of the database schema
 
-![Schema](src/database/image-1.png)
+![Schema](images/image-1.png)
 
 Here is a visual example of the database in sqlviewer
 
-![Database](src/database/database.png)
+![Database](images/database.png)
