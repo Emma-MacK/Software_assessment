@@ -53,7 +53,7 @@ The Bedfile table gathers the following information:
 
 Running the following commands will build the database
 
-python3 /src/database/panel_db_2.py
+python3 src/database/panel_db_2.py
 
 The database auto-generates into where the code is excecuted from
 in this case the root folder.
@@ -62,9 +62,9 @@ in this case the root folder.
 
 Running the following commands will push info to the database
 
-python3 /src/database/genes_to_database.py
-python3 /src/database/panels_to_database.py
-python3 /src/database/bedfile_to_database.py
+python3 src/database/genes_to_database.py
+python3 src/database/panels_to_database.py
+python3 src/database/bedfile_to_database.py
 
 The paths to the data created will need to be edited in the script.
 
@@ -74,4 +74,10 @@ Install sqliteviewer to respective IDE to view database.
 
 ## Example ##
 
-Here is a visual example of the database
+Here is a visual example of the database schema
+
+![Schema](src/database/image-1.png)
+
+Here is a visual example of the database in sqlviewer
+
+![Database](src/database/database.png)
