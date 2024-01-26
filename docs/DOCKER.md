@@ -96,7 +96,3 @@ example
 ```
 docker cp test_docker:./panel_output.bed .
 ```
-
-### Example ###
-
-The following examples were run in a conda environment that did not have the tool requirements present.
