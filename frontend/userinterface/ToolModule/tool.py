@@ -2,7 +2,6 @@
 import pandas as pd
 import requests
 from userinterface.ToolModule import parseJsonPanelAppScript
-import os
 
 
 def tool(testID, PanelSource):
@@ -16,12 +15,11 @@ def tool(testID, PanelSource):
         print("invalid R code")
 
     if PanelSource == "NGTD":
-        print(os.getcwd())
         # get an excel into a pandas dataframe, getting specific columns
-        path = 'userinterface/ToolModule/'
-        xls = ('Rare-and-inherited-disease-'
-               'national-genomic-test-directory-version-5.1.xlsx')
-        test_directory_df = pd.read_excel(path + xls, 'R&ID indications',
+        xls = ("frontend/userinterface/ToolModule/"
+               "Rare-and-inherited-disease-"
+               "national-genomic-test-directory-version-5.1.xlsx")
+        test_directory_df = pd.read_excel(xls, 'R&ID indications',
                                           usecols="A:E", header=1)
 
         # get rows with a matching test code
