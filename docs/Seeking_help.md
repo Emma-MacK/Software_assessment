@@ -13,4 +13,4 @@ If you run into an error while using this tool there are two ways to seek advice
 
 We can be contacted directly at:
 
-fakeemail@fake.com
+[fakeemail@fake.com](fakeemail@fake.com)
