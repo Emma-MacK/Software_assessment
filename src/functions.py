@@ -471,13 +471,18 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
     make a json file.
     """
 
+    # get date and time for savinf files
+    date_of_running = datetime.now()
+    dt_string = date_of_running.strftime("%d%m%Y_%H%M%S")
+
     # build the url for connecting to variant validator
     url_base = ("https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A/") # TODO to long for PEP8 standards
     transcript_filter = "/" + limited_transcripts + "/" + transcript_set + "/" + genome_build # TODO to long for PEP8 standards
 
+    os.mkdir("output/" + dt_string)
     # make empty bed file
     print("Making bed file for gene list:" + str(hgnc_list))
-    concat_filename = "panel_output.bed"
+    concat_filename = "output/" + dt_string + "/panel_output.bed"
     with open(concat_filename, 'w') as f:
         f.write("chrom\tchromStart\tchromEnd\tname\tscore\tstrand\n")
 
@@ -560,7 +565,7 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         # make bedfile header
         print("Making bed file for HGNC:" + str(hgnc))
         filename = str(hgnc) + "_output.bed"
-        with open(filename, 'w') as f:
+        with open("output/" + dt_string + "/" + filename, 'w') as f:
             f.write("chromosome\tstart\tend\tname\tscore\tstrand\n")
 
         # build bed file
