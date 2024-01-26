@@ -27,13 +27,13 @@ from sqlalchemy.orm import sessionmaker
 from panel_db_2 import Base, Panels
 
 # create an empty database
-engine = create_engine("sqlite:///panel_db.db", echo = True)
+engine = create_engine("sqlite:///panel_db.db", echo=True)
 
 # create an empty database with the structure outlined above
-Base.metadata.create_all(bind = engine)
+Base.metadata.create_all(bind=engine)
 
 # create session
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(bind=engine)
 session = Session()
 
 # specifying path to json files

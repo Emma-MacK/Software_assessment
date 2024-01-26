@@ -53,7 +53,7 @@ column_types = {
 # TODO: Update file path as necessary
 BEDFILES_FILE_PATH = "tests/bedfiles"
 
-#getting list of bedfile
+# getting list of bedfile
 files = os.listdir(BEDFILES_FILE_PATH)
 FILE_NAME_PATTERN = '*.bed'
 matching_files = fnmatch.filter(files, FILE_NAME_PATTERN)
@@ -63,20 +63,20 @@ for file in matching_files:
     file_path = os.path.join(BEDFILES_FILE_PATH, file)
     # reading bedfile into a DataFrame
     bed_df = pd.read_csv(file_path,
-                     sep="\t",
-                     comment="#",
-                     dtype=column_types
+                         sep="\t",
+                         comment="#",
+                         dtype=column_types
                          )
     print(bed_df)
 
-    #converting list to string
+    # converting list to string
     file_name = str(file_path)
 
-    #defining file name pattern
+    # defining file name pattern
     # TODO: Update patten if needed
     string_pattern = re.compile(r'(\d+)_(NM_\d+\.\d+)\.bed')
 
-    #parsing HGNC id and Refseq from file name
+    # parsing HGNC id and Refseq from file name
     name_elements = string_pattern.search(file_name)
     hgnc_id = name_elements.group(1)
     refseq_id = name_elements.group(2)

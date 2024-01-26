@@ -12,9 +12,10 @@ CHOICES = (
         ("PanelApp", "PanelApp"),
     )
 
+
 class ContactForm(forms.Form):
     """
-    A class to take in the arguments from the user interface 
+    A class to take in the arguments from the user interface
 
     ...
     Attributes
@@ -22,10 +23,12 @@ class ContactForm(forms.Form):
     panel_ID : forms.CharField
         Collects the testID from user
     PanelSource: forms.ChoiceField
-        Allows the user to select the source of the panel either from the NGTD or PanelApp
+        Allows the user to select the source of the panel either
+        from the NGTD or PanelApp
     ...
     Methods
     -------
     """
-    panel_ID = forms.CharField(label="Input Panel ID",required=True)
+    panel_ID = forms.CharField(label="Input Panel ID",
+                               required=True)
     PanelSource = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)

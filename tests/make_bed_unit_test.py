@@ -1,12 +1,15 @@
 # unit tests for function call_transcript_make_bed
-import unittest
+# import unittest
 from unittest.mock import patch, mock_open, call
 from src.functions import call_transcript_make_bed
 
 print("The following tests require VariantValidator to connect")
 # given correct input, expected to make a bed file and a json file
+
+
 def test_expected_files():
-    # given the input HGNC 4562, expect files 4562_output.bed and 4562_VV_output.json
+    # given the input HGNC 4562, expect files 4562_output.bed and
+    # 4562_VV_output.json
     # if file names are changed, change tests
     HGNC = [4562]
     flank = 25
@@ -17,17 +20,22 @@ def test_expected_files():
     mock_open_files = mock_open()
     # anytiome open is called in functions, open mock files
     with patch("src.functions.open", mock_open_files, create=True):
-        call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
-    # check that while running call_transcript_make_bed, the files were interacted with
+        call_transcript_make_bed(HGNC, flank, genome_build,
+                                 transcript_set, limited_transcripts)
+    # check that while running call_transcript_make_bed,
+    #  the files were interacted with
     mock_open_files.assert_any_call("4562_output.bed", "w")
     mock_open_files.assert_any_call("4562_VV_output.json", "w")
 
+
 # output files have expected content
 def test_file_content():
-    # given the input HGNC 4562, expect files 4562_output.bed and 4562_VV_output.json
+    # given the input HGNC 4562, expect files 4562_output.bed and
+    #  4562_VV_output.json
     # if file names are changed, change tests
     with open('tests/test_expected_4562_output.bed', 'r') as file:
-        # mock calls for header and content are seperate, remove header by spliting on strand
+        # mock calls for header and content are seperate, remove header by
+        # spliting on strand
         expected_bed_data = str(file.read()).split("strand\n")[1]
 
     with open('tests/test_expected_4562_output.json', 'r') as file:
@@ -37,8 +45,8 @@ def test_file_content():
     expected_data_rows = expected_bed_data.split("\n")
 
     # each mock call will include \n at the end bar the last row, so re add
-    for i in range(0,len(expected_data_rows) -1):
-        expected_data_rows[i]= expected_data_rows[i] + "\n"
+    for i in range(0, len(expected_data_rows) - 1):
+        expected_data_rows[i] = expected_data_rows[i] + "\n"
 
     # set variables for mock run
     HGNC = [4562]
@@ -52,12 +60,14 @@ def test_file_content():
 
     # anytiome open is called in functions, open mock files
     with patch("src.functions.open", mock_open_files, create=True):
-        call_transcript_make_bed(HGNC, flank, genome_build, transcript_set, limited_transcripts)
+        call_transcript_make_bed(HGNC, flank, genome_build,
+                                 transcript_set, limited_transcripts)
 
     observed_calls = mock_open_files().write.call_args_list
-    # check that while running call_transcript_make_bed, the expected rows were added to the mock files
+    # check that while running call_transcript_make_bed,
+    # the expected rows were added to the mock files
     # go by length so can ignore empty row at the end
-    for row in range(0,len(expected_data_rows) -1):
+    for row in range(0, len(expected_data_rows) - 1):
         assert call(expected_data_rows[row]) in observed_calls
 
     # Check the mock json was matches data from expected data
