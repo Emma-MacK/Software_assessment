@@ -1,0 +1,209 @@
+[
+    {
+        "current_name": "GRB2 related adaptor protein",
+        "current_symbol": "GRAP",
+        "hgnc": "HGNC:4562",
+        "previous_symbol": "",
+        "requested_symbol": "GRAP",
+        "transcripts": [
+            {
+                "annotations": {
+                    "chromosome": "17",
+                    "db_xref": {
+                        "CCDS": "CCDS11202.1",
+                        "ensemblgene": null,
+                        "hgnc": "HGNC:4562",
+                        "ncbigene": "10750",
+                        "select": "MANE"
+                    },
+                    "ensembl_select": false,
+                    "mane_plus_clinical": false,
+                    "mane_select": true,
+                    "map": "17p11.2",
+                    "note": "GRB2 related adaptor protein",
+                    "refseq_select": true,
+                    "variant": "1"
+                },
+                "coding_end": 685,
+                "coding_start": 32,
+                "description": "Homo sapiens GRB2 related adaptor protein (GRAP), transcript variant 1, mRNA",
+                "genomic_spans": {
+                    "NC_000017.10": {
+                        "end_position": 18950270,
+                        "exon_structure": [
+                            {
+                                "cigar": "109=",
+                                "exon_number": 1,
+                                "genomic_end": 18950270,
+                                "genomic_start": 18950162,
+                                "transcript_end": 109,
+                                "transcript_start": 1
+                            },
+                            {
+                                "cigar": "98=",
+                                "exon_number": 2,
+                                "genomic_end": 18945217,
+                                "genomic_start": 18945120,
+                                "transcript_end": 207,
+                                "transcript_start": 110
+                            },
+                            {
+                                "cigar": "123=",
+                                "exon_number": 3,
+                                "genomic_end": 18939393,
+                                "genomic_start": 18939271,
+                                "transcript_end": 330,
+                                "transcript_start": 208
+                            },
+                            {
+                                "cigar": "169=",
+                                "exon_number": 4,
+                                "genomic_end": 18927696,
+                                "genomic_start": 18927528,
+                                "transcript_end": 499,
+                                "transcript_start": 331
+                            },
+                            {
+                                "cigar": "1489=",
+                                "exon_number": 5,
+                                "genomic_end": 18925457,
+                                "genomic_start": 18923969,
+                                "transcript_end": 1988,
+                                "transcript_start": 500
+                            }
+                        ],
+                        "orientation": -1,
+                        "start_position": 18923969,
+                        "total_exons": 5
+                    },
+                    "NC_000017.11": {
+                        "end_position": 19046957,
+                        "exon_structure": [
+                            {
+                                "cigar": "109=",
+                                "exon_number": 1,
+                                "genomic_end": 19046957,
+                                "genomic_start": 19046849,
+                                "transcript_end": 109,
+                                "transcript_start": 1
+                            },
+                            {
+                                "cigar": "98=",
+                                "exon_number": 2,
+                                "genomic_end": 19041904,
+                                "genomic_start": 19041807,
+                                "transcript_end": 207,
+                                "transcript_start": 110
+                            },
+                            {
+                                "cigar": "123=",
+                                "exon_number": 3,
+                                "genomic_end": 19036080,
+                                "genomic_start": 19035958,
+                                "transcript_end": 330,
+                                "transcript_start": 208
+                            },
+                            {
+                                "cigar": "169=",
+                                "exon_number": 4,
+                                "genomic_end": 19024383,
+                                "genomic_start": 19024215,
+                                "transcript_end": 499,
+                                "transcript_start": 331
+                            },
+                            {
+                                "cigar": "1489=",
+                                "exon_number": 5,
+                                "genomic_end": 19022144,
+                                "genomic_start": 19020656,
+                                "transcript_end": 1988,
+                                "transcript_start": 500
+                            }
+                        ],
+                        "orientation": -1,
+                        "start_position": 19020656,
+                        "total_exons": 5
+                    }
+                },
+                "length": 1988,
+                "reference": "NM_006613.4",
+                "translation": "NP_006604.1"
+            },
+            {
+                "annotations": {
+                    "chromosome": "17",
+                    "db_xref": {
+                        "CCDS": null,
+                        "ensemblgene": "ENSG00000154016",
+                        "hgnc": "HGNC:4562",
+                        "ncbigene": null,
+                        "select": "MANE"
+                    },
+                    "ensembl_select": true,
+                    "mane_plus_clinical": false,
+                    "mane_select": true,
+                    "map": "17p11.2",
+                    "note": "GRB2 related adaptor protein",
+                    "refseq_select": false,
+                    "variant": "201"
+                },
+                "coding_end": 685,
+                "coding_start": 32,
+                "description": "GRAP-201",
+                "genomic_spans": {
+                    "NC_000017.11": {
+                        "end_position": 19046957,
+                        "exon_structure": [
+                            {
+                                "cigar": "109=",
+                                "exon_number": 1,
+                                "genomic_end": 19046957,
+                                "genomic_start": 19046849,
+                                "transcript_end": 109,
+                                "transcript_start": 1
+                            },
+                            {
+                                "cigar": "98=",
+                                "exon_number": 2,
+                                "genomic_end": 19041904,
+                                "genomic_start": 19041807,
+                                "transcript_end": 207,
+                                "transcript_start": 110
+                            },
+                            {
+                                "cigar": "123=",
+                                "exon_number": 3,
+                                "genomic_end": 19036080,
+                                "genomic_start": 19035958,
+                                "transcript_end": 330,
+                                "transcript_start": 208
+                            },
+                            {
+                                "cigar": "169=",
+                                "exon_number": 4,
+                                "genomic_end": 19024383,
+                                "genomic_start": 19024215,
+                                "transcript_end": 499,
+                                "transcript_start": 331
+                            },
+                            {
+                                "cigar": "1489=",
+                                "exon_number": 5,
+                                "genomic_end": 19022144,
+                                "genomic_start": 19020656,
+                                "transcript_end": 1988,
+                                "transcript_start": 500
+                            }
+                        ],
+                        "orientation": -1,
+                        "start_position": 19020656,
+                        "total_exons": 5
+                    }
+                },
+                "length": 1988,
+                "reference": "ENST00000284154.10",
+                "translation": "ENSP00000284154.5"
+            }
+        ]
+    }
+]

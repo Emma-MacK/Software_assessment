@@ -96,42 +96,62 @@ def get_target_panelapp(testID):
         # exit()
 
 
-def get_hgncIDs(result_panelapp):
+def parse_panel_app_json(result_panelapp, test_id):
 
-    """Take the result of the panel app query and extract HGNC IDs
+    """Take the result of the panel app query and extract HGNC IDs,
+    OMIM number and panel version
 
     Args:
-        result_panelapp (str): A json file in string format, returned from querying panel app
+    - result_panelapp (str): A json file in string format, returned
+    from querying panel app
+    -test_id: The R code associated with the request
 
     Returns:
-        all_IDs (list): A list of HGNC ids for the genes in a panel
+    - all_IDs (list): A list of HGNC ids for the genes in a panel
+    - id_omim dictionary (dictionary): The OMIM number for each gene
+    - panel_version (float): The release version of the PanelApp
+        panel
+
     """
     panel_json = json.loads(result_panelapp)
 
     # some cases return "{'detail': 'Not found.'}" indicating not in panel app
     # example; R24 goes to FGFR3 c.1138, looking for a specific mutations
-    if 'detail' in panel_json:
-        if panel_json['detail'] == "Not found.":
+    if "detail" in panel_json:
+        if panel_json["detail"] == "Not found.":
             print("This R code does not have an associated panel")
             print("This R code may not call for an NGS test")
             exit()
 
+    # parsing data on genes in the panel.
     gene_info = panel_json["genes"]
-    all_IDs = []
+
+    # creating empty lists for hgnc ID's and OMIM numbers
+    all_ids = []
+    id_omim_dictionary = {}
     # there are multiple genes in the list, loop over to get all HGNC ids
+    # and omim gene numbers
     for i in range(1,len(gene_info)):
         gene_info_item = gene_info[i]
-        gene_data = gene_info_item['gene_data']
+        gene_data = gene_info_item["gene_data"]
         hgnc_id = gene_data["hgnc_id"]
-        all_IDs.append(hgnc_id)
+        all_ids.append(hgnc_id)
+        omim_number = gene_data["omim_gene"] # returns a list
+        omim_number_string = omim_number[0] # converting to string
+        id_omim_dictionary[hgnc_id] = omim_number_string
 
-    all_IDs = ' '.join(all_IDs).replace('HGNC:','').split()
+    all_ids = " ".join(all_ids).replace("HGNC:","").split()
 
     # check if list is empty
-    if len(all_IDs) == 0:
+    if len(all_ids) == 0:
         print("No gene IDs found for this ID")
         exit()
-    return all_IDs
+
+
+    # Pulling panel version and saving as a float
+    panelid_version = "_".join([test_id, str(panel_json["id"]), panel_json["version"]])
+
+    return all_ids, id_omim_dictionary, panelid_version
 
 def check_testID(testID, file_directory, version):
     """Test the given R code to ensure it is in the correct format
@@ -398,6 +418,37 @@ def check_ngtd(file_directory, link):
 
     return ngtd_status, version
 
+def make_panel_json(hgnc, id_omim_dictionary, panel_version, database_dict):
+    """
+    Makes the json files needed to parse data into the database
+
+    Args:
+    - hgnc (str): The hgnc id for which the json file is being created
+    - id_omim_dictionary (dict): A dictionary containing the omim no
+    for each hgnc id on the panel
+    - panel_version (str): The Panel ID and version
+    - database_dict (dict): A dictionary containing the transcript
+    information for the panel
+    """
+
+    # extract omim id from id_omim_dictionary
+    omim_value = id_omim_dictionary[f"HGNC:{hgnc}"]
+
+    # add omim_value and panel version to database_dictionary
+    database_dict["omim_no"] = omim_value
+    database_dict["panel_id_v"] = panel_version
+
+    # wrapping the database into a list
+    database_list = [database_dict]
+
+    json_object = json.dumps(database_list, indent=4)
+    json_name = f"{hgnc}_VV_output.json"
+    # Writing to sample.json
+    with open(json_name, "w") as outfile:
+        outfile.write(json_object)
+    logging.info("json containing data for database entry created")
+
+
 def call_transcript_make_bed(hgnc_list, flank, genome_build,
                              transcript_set, limited_transcripts):
     """A function that uses the HGNC ID from the panelapp json
@@ -414,6 +465,10 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         ensembl, or all
         - limited_transcripts (str): The transcript to use. mane_select,
         mane, select
+
+    Returns:
+    - database_dict: A dictionary containing the information needed to
+    make a json file.
     """
 
     # get date and time for savinf files
@@ -499,22 +554,16 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
         # get refseq id for bedfile name
         refseq_id = transcripts_dict["reference"]
 
-        # get the info for database and write into json
+        # get the info for database
         database_dict = {
             "gene_name": json_dict["current_name"],
-            "hgnc_ID": json_dict["hgnc"],
+            "hgnc_id": json_dict["hgnc"],
             "hgnc_symbol": json_dict["current_symbol"],
             "refseq_id" : transcripts_dict["reference"],
-            "ensembl_select" : str(annotations_dict["ensembl_select"]),
-            "mane_plus_clinical" : str(annotations_dict["mane_plus_clinical"]),
-            "mane_select" : str(annotations_dict["mane_select"])
+            "ensembl_select" : bool(annotations_dict["ensembl_select"]),
+            "mane_plus_clinical" : bool(annotations_dict["mane_plus_clinical"]),
+            "mane_select" : bool(annotations_dict["mane_select"]),
         }
-        json_object = json.dumps(database_dict, indent=4)
-        json_name = str(hgnc) + "_VV_output.json"
-        # Writing to sample.json
-        with open(json_name, "w") as outfile:
-            outfile.write(json_object)
-        logging.info("json containing data for database entry created")
 
         # make bedfile header
         print("Making bed file for HGNC:" + str(hgnc))
@@ -549,3 +598,5 @@ def call_transcript_make_bed(hgnc_list, flank, genome_build,
                 with open(concat_filename, 'a') as f:
                     f.write(chromosome + "\t" + str(start) + "\t" + str(end) + "\t" + label + "\t" + str(0) +"\t" + sense + "\n")
         logging.info("Bedfiles created. %sbp flanking region used", flank)
+
+    return database_dict

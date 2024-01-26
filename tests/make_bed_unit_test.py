@@ -1,6 +1,8 @@
 # unit tests for function call_transcript_make_bed
 import unittest
-from unittest.mock import patch, mock_open, call
+import pytest
+import json
+from unittest.mock import patch, mock_open, call, Mock
 from src.functions import call_transcript_make_bed
 
 print("The following tests require VariantValidator to connect")
@@ -72,3 +74,58 @@ def test_file_content():
 # given specific input, expecting specific output
 
 # expected_files_test()
+
+print("The following test should work even if variant validator is down")
+
+@patch("functions.request.get")
+def test_database_dict_and_bedfile(mock_requests_get):
+
+    # load json file for mocking
+    with open("tests/example_vv_get.json", "r") as file:
+        json_content = json.load(file)
+
+    # Assumes successful response from Variant Validator
+    mock_response = Mock(status_code=200, content=json.dumps(json_content))
+    mock_requests_get.return_value = mock_response
+
+    # calling function with fixed inputs
+    hgnc_list = ["4562"]
+    flank = 25
+    genome_build = "GRCh37"
+    transcript_set = "refseq"
+    limited_transcripts = "mane_select"
+
+    result = call_transcript_make_bed(hgnc_list, flank, genome_build, transcript_set, limited_transcripts)
+
+    # Assertions based on the expected behavior of your function
+    assert isinstance(result, dict)
+
+    expected_result = {
+        "gene_name": "GRB2 related adaptor protein",
+        "hgnc_id": "HGNC:4562",
+        "hgnc_symbol": "GRAP",
+        "refseq_id": "NM_006613.4",
+        "ensembl_select": False,  # Ensure it's a boolean, not a string
+        "mane_plus_clinical": False,  # Ensure it's a boolean, not a string
+        "mane_select": True,  # Ensure it's a boolean, not a string
+    }
+
+    assert result == expected_result
+
+    # Additional assertions based on your specific requirements
+
+    # Check bedfile content
+    with open("tests/make_bed_unit_test.py", "r") as bedfile:
+        expected_bedfile_content = bedfile.read()
+
+    assert expected_bedfile_content == """chromosome\tstart\tend\tname\tscore\tstrand
+chr17\t18950137\t18950295\tNC_000017.10_GRAP_exon_1\t0\t-
+chr17\t18945095\t18945242\tNC_000017.10_GRAP_exon_2\t0\t-
+chr17\t18939246\t18939418\tNC_000017.10_GRAP_exon_3\t0\t-
+chr17\t18927503\t18927721\tNC_000017.10_GRAP_exon_4\t0\t-
+chr17\t18923944\t18925482\tNC_000017.10_GRAP_exon_5\t0\t-"""
+
+if __name__ == '__main__':
+    pytest.main()
+
+
