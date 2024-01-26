@@ -1,4 +1,6 @@
-# Panel Assigner v1 (holding name) #
+# Panel Assigner v2 #
+
+This tool is designed to take an R code and return a bed file with the for the relevant panel. There 
 
 ## APP usage ##
 Using argParser the Rcode TestID is used to pull panel information from either the National Genomic Test Directory (NGTD) or PanelAppD
