@@ -7,3 +7,4 @@ This document dictates the changes and improvements we would aim to implement in
 - Update docker to save outputs directly to the local directory using environmental variables
 - For database interaction, let the user pick where files going to the database are being pulled from
 - Integrate database into docker
+- Create function to use existing bedfiles from database to allow tools to run when Variant Validator is down
