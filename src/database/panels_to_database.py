@@ -6,19 +6,19 @@ from sqlalchemy.orm import sessionmaker
 from panel_db_2 import Base, Panels, Genes, Bedfile
 
 # create an empty database
-engine = create_engine("sqlite:///panel_db.db", echo=True)
+engine = create_engine("sqlite:///panel_db.db", echo = True)
 
 # create an empty database with the structure outlined above
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind = engine)
 
 # create session
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind = engine)
 session = Session()
 
 # specifying path to json files
 json_files_path = "tests/panel_info_jsons"
 
-#getting list of json files
+# getting list of json files
 files = os.listdir(json_files_path)
 file_name_pattern = '*.json'
 matching_files = fnmatch.filter(files, file_name_pattern)
