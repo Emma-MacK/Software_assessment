@@ -20,6 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("userinterface.urls")),
-# The frontend currently consists of solely the "" Url
-# New paths and pages can be added here
+    # The frontend currently consists of solely the "" Url
+    # New paths and pages can be added here
 ]

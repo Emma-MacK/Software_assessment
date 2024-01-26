@@ -1,20 +1,24 @@
 """
-This function will handle the parsing of the JSON returned from PanelApp into the necessary fields.
+This function will handle the parsing of the
+JSON returned from PanelApp into the necessary fields.
 """
-import pandas as pd
-import os 
-import requests
 import json
-from json import JSONDecodeError
-def parseJsonPanelAppFunction(r, logfile):
+import os
+import pandas as pd
+import requests
+
+
+def parse_json_panelapp(r, logfile):
     """
-    This function will handle the parsing of the JSON returned from PanelApp into the necessary fields.
-    It takes in the response object parses it and returns a dataframe object with the following columns:
-    0   uniqueID 
-    1   hgnc_IDs     
-    2   gene_Name    
-    3   gene_Symbol  
-    4   OMIM_Gene    
+    This function will handle the parsing of
+    the JSON returned from PanelApp into the necessary fields.
+    It takes in the response object parses it and returns
+    a dataframe object with the following columns:
+    0   uniqueID
+    1   hgnc_IDs
+    2   gene_Name
+    3   gene_Symbol
+    4   OMIM_Gene
     """
     try:
         # check if the status code is 200 (OK)
@@ -22,34 +26,43 @@ def parseJsonPanelAppFunction(r, logfile):
             # Try to parse the response as json
             print("The request was successful!")
             decoded = r.json()
-            #decoded_genes =decoded['genes'] #Extract gene list
-            #uniqueNum = str(decoded['id']) + "_" + decoded['version'] # get uniqueID
-            decoded_genes =decoded['genes'] #Extract gene list
-            uniqueNum = str(decoded['id']) + "_" + decoded['version'] # get uniqueID
+            # Extract gene list
+            decoded_genes = decoded['genes']
+            # get uniqueID
+            unique_num = str(decoded['id']) + "_" + decoded['version']
             try:
-                hgncIDs = []
-                geneNames = []
-                geneSymbols = []
-                omimGenes = []
+                hgnc_IDs = []
+                gene_names = []
+                gene_symbols = []
+                omim_genes = []
                 for x in decoded_genes:
-                    genes = x.get('gene_data',{}).get('hgnc_id') # string
-                    geneName = x.get('gene_data',{}).get('gene_name')
-                    omimGene = x.get('gene_data',{}).get('omim_gene')
-                    geneSymbol = x.get('gene_data',{}).get('gene_symbol')
-                    #Iteratively fill lists with gene data
-                    hgncIDs.append(genes)
-                    geneNames.append(geneName)
-                    geneSymbols.append(geneSymbol)
-                    omimGenes.append(omimGene)
-                zipped = list(zip(hgncIDs, geneNames,geneSymbols, omimGenes)) # prepare lists to enter dataframe
-                entries = pd.DataFrame(zipped, columns=['hgnc_IDs', 'gene_Name', 'gene_Symbol', 'OMIM_Gene']) # populate dataframe with lists
-                entries.insert(0, 'uniqueID', uniqueNum) #insert uniqueID column
+                    # strings
+                    genes = x.get('gene_data', {}).get('hgnc_id')
+                    gene_name = x.get('gene_data', {}).get('gene_name')
+                    omim_gene = x.get('gene_data', {}).get('omim_gene')
+                    gene_symbol = x.get('gene_data', {}).get('gene_symbol')
+                    # Iteratively fill lists with gene data
+                    hgnc_IDs.append(genes)
+                    gene_names.append(gene_name)
+                    gene_symbols.append(gene_symbol)
+                    omim_genes.append(omim_gene)
+                # prepare lists to enter dataframe
+                zipped = list(zip(hgnc_IDs, gene_names,
+                                  gene_symbols, omim_genes))
+                # populate dataframe with lists
+                df_columns = ['hgnc_IDs', 'gene_Name',
+                              'gene_Symbol', 'OMIM_Gene']
+                entries = pd.DataFrame(zipped, columns=df_columns)
+                # insert uniqueID column
+                entries.insert(0, 'uniqueID', unique_num)
                 if logfile is True:
                     os.makedirs('logFiles', exist_ok=True)
                     entries.to_csv('logFiles/entries.csv')
-                return(entries)
+                return entries
             except KeyError:
-                print('KeyError:PanelApp output JSON doesn\' contain \'gene_name\' or \'hgnc_id\' or \'omim_gene\' or \'gene_symbol\' key')
+                print('KeyError:PanelApp output JSON doesn\' contain \
+                \'gene_name\' or \'hgnc_id\' or \'omim_gene\' or \
+                \'gene_symbol\' key')
             else:
                 print("")
         else:
@@ -62,5 +75,3 @@ def parseJsonPanelAppFunction(r, logfile):
     except json.decoder.JSONDecodeError as e:
         # Catch and print any json decoding exception
         print(e)
-    except JSONDecodeError:
-        print('Response could not be serialized')

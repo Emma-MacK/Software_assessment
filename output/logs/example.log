@@ -1,0 +1,5 @@
+2024-01-26 10:27:14 GMT, INFO, Request received for R208 panel
+2024-01-26 10:27:14 GMT, INFO, Test ID found in the national genomic test directory
+2024-01-26 10:27:14 GMT, INFO, Attempting to pull data from PanelApp Api
+2024-01-26 10:27:15 GMT, INFO, Successfully pulled data for R208:Inherited breast cancer and ovarian cancer
+2024-01-26 10:27:15 GMT, INFO, Querying: https://rest.variantvalidator.org/VariantValidator/tools/gene2transcripts_v2/HGNC%3A/1100/mane_select/refseq/GRCh37
